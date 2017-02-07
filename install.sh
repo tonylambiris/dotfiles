@@ -30,17 +30,17 @@ function install-file {
 
 	local _srcfile="$1"
 	local _dstfile="${HOME}/${1/dot/}"
+	local _copycmd="cp -af"
 
 	if [[ ! -r "${_srcfile}" ]]; then
 		echo "Couldn't read source file ${_srcfile}, skipping..." 2>> "${LOGFILE}"
 		return
 	fi
 
-	copycmd="cp -af"
 	if [[ -d "${_srcfile}" ]]; then
-		copydot="${copycmd} ${_srcfile}/* ${_dstfile}/"; _type="directory"
+		copydot="${_copycmd} ${_srcfile}/* ${_dstfile}/"; _type="directory"
 	elif [[ -f "${_srcfile}" ]]; then
-		copydot="${copycmd} ${_srcfile} ${_dstfile}"; _type="file"
+		copydot="${_copycmd} ${_srcfile} ${_dstfile}"; _type="file"
 	else
 		echo "Unknown file type for ${_srcfile}, skipping..." 2>> "${LOGFILE}"
 		return
@@ -50,6 +50,7 @@ function install-file {
 
 	case ${ans} in
 	y|Y)
+		test -d "${_srcfile}" && mkdir -p "${_dstfile}"
 		${copydot} 2>> ${LOGFILE}
 
 		[[ $? -eq 0 ]] && _retcode="ok" || _retcode="err"
