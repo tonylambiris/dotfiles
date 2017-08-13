@@ -132,14 +132,8 @@ zplug 'zsh-users/zsh-history-substring-search'
 #
 #zplug load
 
-# Load theme file
-#zplug 'dracula/zsh', as:theme
-#zplug "denysdovhan/spaceship-zsh-theme", use:spaceship.zsh, as:theme
-#zplug "denysdovhan/spaceship-zsh-theme", use:spaceship.zsh, from:github, as:theme
-#zplug "bhilburn/powerlevel9k", from:github, at: next, use:powerlevel9k.zsh-theme, as:theme
-
 # Supports oh-my-zsh plugins and the like
-zplug "plugins/git",  from:oh-my-zsh
+zplug 'plugins/git', from:oh-my-zsh
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
