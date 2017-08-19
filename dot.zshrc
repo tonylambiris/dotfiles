@@ -77,7 +77,7 @@ POWERLEVEL9K_OS_ICON_BACKGROUND="clear"
 POWERLEVEL9K_OS_ICON_FOREGROUND="grey"
 
 # zsh-syntax-highlighting
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=white,bold,bg=red")
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]="fg=blue"
