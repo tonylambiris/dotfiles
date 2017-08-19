@@ -15,7 +15,7 @@ zsh_wifi_signal(){
 # powerlevel9k prompt theme
 #DEFAULT_USER=$USER
 POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 #POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 #POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{cyan}\/%F{blue}"
 POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{white}\/%F{grey}"
@@ -173,7 +173,7 @@ watch=(notme)         # Report login/logout events for everybody except ourself.
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 #WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
-WORDCHARS="\"*?_-.[]~=&;!#$%^(){}<>\""
+WORDCHARS="\"*?_-[]~=&;!#$%^(){}<>\""
 
 # History
 HISTFILE=~/.zsh_history
