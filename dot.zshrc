@@ -324,8 +324,9 @@ setup_agents() {
 
   if which keychain > /dev/null 2>&1; then
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
-      eval $(keychain -q --nogui --eval --host fix \
-		  --agents ssh,gpg $ssh_keys ${(f)gpg_keys})
+      run_agent="$(keychain -q --nogui --eval --host fix --inherit any-once \
+		  --agents ssh,gpg $ssh_keys ${(f)gpg_keys})"
+      [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `$SSH_KEYCHAIN`
     fi
   fi
 }
