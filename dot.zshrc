@@ -70,7 +70,7 @@ POWERLEVEL9K_ROOT_ICON="\u26a1" # ⚡
 POWERLEVEL9K_HOST_LOCAL_BACKGROUND="clear"
 POWERLEVEL9K_HOST_LOCAL_FOREGROUND="cyan"
 POWERLEVEL9K_HOST_REMOTE_BACKGROUND="clear"
-POWERLEVEL9K_HOST_REMOTE_FOREGROUND="green"
+POWERLEVEL9K_HOST_REMOTE_FOREGROUND="yellow"
 POWERLEVEL9K_HOST_ICON="\uF109" # 
 POWERLEVEL9K_SSH_ICON="\uF489"  # 
 POWERLEVEL9K_OS_ICON_BACKGROUND="clear"
@@ -205,13 +205,13 @@ setopt extended_glob
 # combination with the globalias plugin.
 
 # Directory coloring
-#if which gls > /dev/null 2>&1; then
-#  # Prefer GNU version, since it respects dircolors.
-#  ls() { gls --group-directories-first --color=auto $@ }
-#elif [[ $OSTYPE = (darwin|freebsd)* ]]; then
-#  export CLICOLOR="YES" # Equivalent to passing -G to ls.
-#  export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
-#fi
+if which gls > /dev/null 2>&1; then
+  # Prefer GNU version, since it respects dircolors.
+  ls() { gls --group-directories-first --color=auto $@ }
+elif [[ $OSTYPE = (darwin|freebsd)* ]]; then
+  export CLICOLOR="YES" # Equivalent to passing -G to ls.
+  export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
+fi
 
 # Directory management
 alias la="ls -a"
