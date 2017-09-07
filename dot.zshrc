@@ -1,58 +1,87 @@
 # =============================================================================
-# environment
+#                                   Variables
 # =============================================================================
-export EDITOR=nvim
-export LANG=en_US.UTF-8
+export TERM="xterm-256color"
+export LANG="en_US.UTF-8"
+#export EDITOR="nvim"
+#export LC_ALL="en_US.UTF-8"
 
-# =============================================================================
-# functions
-# =============================================================================
-zsh_wifi_signal(){
-	local signal=$(nmcli -t device wifi | grep '^*' | awk -F':' '{print $6}')
-    local color="yellow"
-    [[ $signal -gt 75 ]] && color="green"
-    [[ $signal -lt 50 ]] && color="red"
-    echo -n "%F{$color}\uf1eb" # \uf1eb is 
-}
-
-# =============================================================================
-# plugins
-# =============================================================================
 # powerlevel9k prompt theme
 #DEFAULT_USER=$USER
 POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
-#POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_right"
+
 #POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{cyan}\/%F{blue}"
-POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{white}\/%F{grey}"
-POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=""
-POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=""
+#POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{grey}\/%F{white}"
+#POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{white}\/%F{grey}"
+#POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{235}\/%F{235}"
+POWERLEVEL9K_DIR_OMIT_FIRST_CHARACTER=false
+#POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR="❯"
+#POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR="❯"
+#POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR="❮"
+#POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR="❮"
+
+#POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=""
+#POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=""
+
+# Separators
+#POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=$'\uE0B4'
+#POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=$'\uE0B5'
+#POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=$'\uE0B6'
+#POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=$'\uE0B7'
+
+POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR="\uE0B4"
+POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR="\uE0B6"
 POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=""
 POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=""
+
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+
+#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{cyan}\u256D\u2500%f"
+#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{grey}\u2570\uF460%f "
+
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{cyan}\u256D\u2500%f"
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{grey}\u2570\uf460%f "
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{014}\u2570%F{cyan}\uF460%F{073}\uF460%F{109}\uF460%f "
+
+#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{grey}\uF460%f "
+#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{clear}%F{cyan}%m%f%k %F{123}\uF460%f "
+
 POWERLEVEL9K_STATUS_VERBOSE=false
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="clear"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator time_joined
-                                   dir_joined dir_writable_joined)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time vcs
-                                    background_jobs_joined host_joined)
-POWERLEVEL9K_VCS_CLEAN_BACKGROUND="clear"
-POWERLEVEL9K_VCS_CLEAN_FOREGROUND="green"
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="clear"
-POWERLEVEL9K_VCS_MODIFIED_FOREGROUND="yellow"
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="clear"
-POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND="yellow"
-POWERLEVEL9K_DIR_HOME_BACKGROUND="clear"
-POWERLEVEL9K_DIR_HOME_FOREGROUND="grey"
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="clear"
-POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="grey"
-POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="clear"
-POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="grey"
-POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="clear"
-POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="red"
+
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh root_indicator time_joined dir_joined dir_writable_joined vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator host dir dir_writable vcs)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs_joined host_joined)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs_joined ssh time )
+
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh context root_indicator time_joined dir_joined dir_writable_joined vcs)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs anaconda pyenv virtualenv rbenv rvm nodeenv nvm time)
+
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator time_joined
+#                                   dir_joined dir_writable_joined)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time vcs
+#                                    background_jobs_joined host_joined)
+
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND="green"
+POWERLEVEL9K_VCS_CLEAN_FOREGROUND="black"
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND="yellow"
+POWERLEVEL9K_VCS_MODIFIED_FOREGROUND="black"
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND="yellow"
+POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND="black"
+
+POWERLEVEL9K_DIR_HOME_BACKGROUND="cyan"
+POWERLEVEL9K_DIR_HOME_FOREGROUND="black"
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND="cyan"
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND="black"
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND="cyan"
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="black"
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="red"
+POWERLEVEL9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="grey"
+
 POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND="clear"
 POWERLEVEL9K_ROOT_INDICATOR_FOREGROUND="red"
 POWERLEVEL9K_STATUS_OK_BACKGROUND="clear"
@@ -62,23 +91,36 @@ POWERLEVEL9K_STATUS_ERROR_FOREGROUND="red"
 #POWERLEVEL9K_TIME_FORMAT="%D{\uf073 %b %d \uf017 %H:%M}" #  Jun 15  09:32
 #POWERLEVEL9K_TIME_FORMAT="%D{\uf017 %H:%M}" #  Jun 15  09:32
 POWERLEVEL9K_TIME_FOREGROUND="cyan"
-POWERLEVEL9K_TIME_BACKGROUND="clear"
+POWERLEVEL9K_TIME_BACKGROUND="235"
+
+POWERLEVEL9K_VCS_GIT_GITHUB_ICON=""
+POWERLEVEL9K_VCS_GIT_BITBUCKET_ICON=""
+POWERLEVEL9K_VCS_GIT_GITLAB_ICON=""
+POWERLEVEL9K_VCS_GIT_ICON=""
+
+#POWERLEVEL9K_SSH_FOREGROUND="226"
+POWERLEVEL9K_SSH_FOREGROUND="yellow"
+POWERLEVEL9K_SSH_BACKGROUND="235"
+
 POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND="clear"
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="magenta"
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND="005"
 POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND="clear"
-POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND="magenta"
+POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND="005"
 POWERLEVEL9K_USER_DEFAULT_BACKGROUND="clear"
 POWERLEVEL9K_USER_DEFAULT_FOREGROUND="cyan"
 POWERLEVEL9K_USER_ROOT_BACKGROUND="clear"
 POWERLEVEL9K_USER_ROOT_FOREGROUND="red"
 POWERLEVEL9K_USER_ICON="\uf415" # 
 POWERLEVEL9K_ROOT_ICON="\u26a1" # ⚡
-POWERLEVEL9K_HOST_LOCAL_BACKGROUND="clear"
+
+POWERLEVEL9K_HOST_LOCAL_BACKGROUND="235"
 POWERLEVEL9K_HOST_LOCAL_FOREGROUND="cyan"
-POWERLEVEL9K_HOST_REMOTE_BACKGROUND="clear"
-POWERLEVEL9K_HOST_REMOTE_FOREGROUND="magenta"
+POWERLEVEL9K_HOST_REMOTE_BACKGROUND="235"
+POWERLEVEL9K_HOST_REMOTE_FOREGROUND="cyan"
+
 POWERLEVEL9K_HOST_ICON="\uF109" # 
 POWERLEVEL9K_SSH_ICON="\uF489"  # 
+
 POWERLEVEL9K_OS_ICON_BACKGROUND="clear"
 POWERLEVEL9K_OS_ICON_FOREGROUND="grey"
 
@@ -91,6 +133,9 @@ ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=grey"
 ZSH_HIGHLIGHT_STYLES[alias]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[function]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[command]='fg=green'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green'
 ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
 ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta"
 ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan,bold"
@@ -98,10 +143,27 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
 
-# =============================================================================
-# zplug
-# =============================================================================
 
+
+# =============================================================================
+#                                   Functions
+# =============================================================================
+powerlevel9k_random_color(){
+	local code
+	for code ({000..255}) echo -n "$%F{$code}"
+}
+
+zsh_wifi_signal(){
+	local signal=$(nmcli -t device wifi | grep '^*' | awk -F':' '{print $6}')
+    local color="yellow"
+    [[ $signal -gt 75 ]] && color="green"
+    [[ $signal -lt 50 ]] && color="red"
+    echo -n "%F{$color}\uf1eb" # \uf1eb is 
+}
+
+# =============================================================================
+#                                   Plugins
+# =============================================================================
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
     git clone https://github.com/zplug/zplug ~/.zplug
@@ -171,7 +233,7 @@ if zplug check "seebi/dircolors-solarized"; then
 fi
 
 # =============================================================================
-# options
+#                                   Options
 # =============================================================================
 
 # improved less option
@@ -183,8 +245,7 @@ WATCHFMT="%n %a %l from %m at %t."
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 #WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
-#WORDCHARS="\"*?_-[]~=&;!#$%^(){}<>\""
-WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+WORDCHARS="\"*?_-[]~=&;!#$%^(){}<>\""
 
 # History
 HISTFILE=~/.zsh_history
@@ -216,12 +277,13 @@ setopt extended_glob
 # combination with the globalias plugin.
 
 # Directory coloring
-if which gls > /dev/null 2>&1; then
-  # Prefer GNU version, since it respects dircolors.
-  ls() { gls --group-directories-first --color=auto $@ }
-elif [[ $OSTYPE = (darwin|freebsd)* ]]; then
-  export CLICOLOR="YES" # Equivalent to passing -G to ls.
-  export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
+if [[ $OSTYPE = (darwin|freebsd)* ]]; then
+	# Prefer GNU version, since it respects dircolors.
+	alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
+	export CLICOLOR="YES" # Equivalent to passing -G to ls.
+	export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
+else
+	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
 fi
 
 # Directory management
@@ -288,10 +350,6 @@ zstyle ":completion:*" matcher-list \
 
 zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 
-#zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-#autoload -Uz compinit
-#compinit
-
 # =============================================================================
 #                                    Other
 # =============================================================================
@@ -339,26 +397,19 @@ setup_agents() {
 
   if which keychain > /dev/null 2>&1; then
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
-      run_agent="$(keychain -q --nogui --eval --inherit any-once \
-		  --systemd --agents ssh,gpg $ssh_keys ${(f)gpg_keys})"
-      [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `$SSH_KEYCHAIN`
+	  #alias keychain='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
+	  alias run_agent='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
+	  #[[ -t ${fd:-0} || -p /dev/stdin ]] && eval "$keychain)"
+	  [[ -t ${fd:-0} || -p /dev/stdin ]] && eval $keychain
     fi
   fi
 }
-#setup_agents
-#unfunction setup_agents
+setup_agents
+unfunction setup_agents
 
 # Fix alt-arrow keys
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-
-# =============================================================================
-# dotfiles
-# =============================================================================
-#for file in ~/.{exports,aliases,extra}; do
-#  [ -r "$file" ] && [ -f "$file" ] && source "$file";
-#done;
-#unset file;
 
 # Source local customizations.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
