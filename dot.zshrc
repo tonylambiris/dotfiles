@@ -1,5 +1,11 @@
 # =============================================================================
-#                                   Functions
+# environment
+# =============================================================================
+export EDITOR=nvim
+export LANG=en_US.UTF-8
+
+# =============================================================================
+# functions
 # =============================================================================
 zsh_wifi_signal(){
 	local signal=$(nmcli -t device wifi | grep '^*' | awk -F':' '{print $6}')
@@ -10,7 +16,7 @@ zsh_wifi_signal(){
 }
 
 # =============================================================================
-#                                   Plugins
+# plugins
 # =============================================================================
 # powerlevel9k prompt theme
 #DEFAULT_USER=$USER
@@ -80,8 +86,8 @@ POWERLEVEL9K_OS_ICON_FOREGROUND="grey"
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=white,bold,bg=red")
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[path]="fg=blue"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[path]="fg=white"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=grey"
 ZSH_HIGHLIGHT_STYLES[alias]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[builtin]="fg=cyan"
 ZSH_HIGHLIGHT_STYLES[function]="fg=cyan"
@@ -91,6 +97,10 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta,bold"
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
+
+# =============================================================================
+# zplug
+# =============================================================================
 
 # Check if zplug is installed
 if [[ ! -d ~/.zplug ]]; then
@@ -161,7 +171,7 @@ if zplug check "seebi/dircolors-solarized"; then
 fi
 
 # =============================================================================
-#                                   Options
+# options
 # =============================================================================
 
 # improved less option
@@ -169,18 +179,19 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 
 # Watching other users
 WATCHFMT="%n %a %l from %m at %t."
-watch=(notme)         # Report login/logout events for everybody except ourself.
+#watch=(notme)         # Report login/logout events for everybody except ourself.
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 #WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
-WORDCHARS="\"*?_-[]~=&;!#$%^(){}<>\""
+#WORDCHARS="\"*?_-[]~=&;!#$%^(){}<>\""
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 # History
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
 setopt autocd                   # Allow changing directories without `cd`
-setopt append_history           # Don"t overwrite history
+setopt append_history           # Don;t overwrite history
 setopt extended_history         # Also record time and duration of commands.
 setopt share_history            # Share history between multiple shells
 setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
@@ -277,6 +288,10 @@ zstyle ":completion:*" matcher-list \
 
 zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 
+#zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+#autoload -Uz compinit
+#compinit
+
 # =============================================================================
 #                                    Other
 # =============================================================================
@@ -336,6 +351,14 @@ setup_agents() {
 # Fix alt-arrow keys
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+# =============================================================================
+# dotfiles
+# =============================================================================
+#for file in ~/.{exports,aliases,extra}; do
+#  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+#done;
+#unset file;
 
 # Source local customizations.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
