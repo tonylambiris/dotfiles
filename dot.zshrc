@@ -209,6 +209,7 @@ zplug "plugins/dnf", from:oh-my-zsh
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/go", from:oh-my-zsh
 zplug "plugins/golang", from:oh-my-zsh
+zplug "plugins/nmap", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/tmux", from:oh-my-zsh
 
@@ -327,13 +328,15 @@ bindkey "^F" history-incremental-pattern-search-forward
 
 # History
 if zplug check "zsh-users/zsh-history-substring-search"; then
-  zmodload zsh/terminfo
-  bindkey "$terminfo[kcuu1]" history-substring-search-up
-  bindkey "$terminfo[kcud1]" history-substring-search-down
-  bindkey -M emacs "^P" history-substring-search-up
-  bindkey -M emacs "^N" history-substring-search-down
-  bindkey -M vicmd "k" history-substring-search-up
-  bindkey -M vicmd "j" history-substring-search-down
+	zmodload zsh/terminfo
+	bindkey "$terminfo[kcuu1]" history-substring-search-up
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+	#bindkey -M emacs "^P" history-substring-search-up
+	#bindkey -M emacs "^N" history-substring-search-down
+	#bindkey -M vicmd "k" history-substring-search-up
+	#bindkey -M vicmd "j" history-substring-search-down
+	bindkey "^[[1;5A" history-substring-search-up
+	bindkey "^[[1;5B" history-substring-search-down
 fi
 
 # Do not require a space when attempting to tab-complete.
