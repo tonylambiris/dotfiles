@@ -255,8 +255,8 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 
 # Watching other users
 #WATCHFMT="%n %a %l from %m at %t."
-#watch=(notme)         # Report login/logout events for everybody except ourself.
-watch=(all)         # Report login/logout events for everybody except ourself.
+watch=(notme)         # Report login/logout events for everybody except ourself.
+#watch=(all)         # Report login/logout events for everybody except ourself.
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 #WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
