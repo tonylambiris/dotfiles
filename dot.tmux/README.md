@@ -35,4 +35,5 @@ run '~/.tmux/plugins/tpm/tpm'
 Reload TMUX environment so TPM is sourced:
 
 # type this in terminal
+$ ln -sf ~/.tmux/tmux.conf ~/.tmux.conf
 $ tmux source ~/.tmux.conf
