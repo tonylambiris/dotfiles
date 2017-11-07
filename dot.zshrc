@@ -17,12 +17,12 @@ zsh_wifi_signal(){
     echo -n "%F{$color}\uf1eb" # \uf1eb is 
 }
 
-
 # =============================================================================
 #                                   Variables
 # =============================================================================
 export TERM="xterm-256color"
 export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
 DEFAULT_FOREGROUND=006 DEFAULT_BACKGROUND=235
 DEFAULT_COLOR=$DEFAULT_FOREGROUND
@@ -425,6 +425,8 @@ if zplug check "zsh-users/zsh-history-substring-search"; then
 	bindkey "^[[1;5A" history-substring-search-up
 	bindkey "^[[1;5B" history-substring-search-down
 fi
+
+[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
 # Source local customizations.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
