@@ -20,7 +20,6 @@ zsh_wifi_signal(){
 # =============================================================================
 #                                   Variables
 # =============================================================================
-export TERM="xterm-256color"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
@@ -312,21 +311,21 @@ alias grep='() { $(whence -p grep) --color=auto $@ }'
 alias egrep='() { $(whence -p egrep) --color=auto $@ }'
 
 # Directory management
-alias la="ls -a"
-alias ll="ls -l"
-alias lal="ls -al"
-alias d="dirs -v"
-alias 1="pu"
-alias 2="pu -2"
-alias 3="pu -3"
-alias 4="pu -4"
-alias 5="pu -5"
-alias 6="pu -6"
-alias 7="pu -7"
-alias 8="pu -8"
-alias 9="pu -9"
-pu() { pushd $1 &> /dev/null; dirs -v; }
-po() { popd &> /dev/null; dirs -v; }
+alias la='ls -a'
+alias ll='ls -l'
+alias lal='ls -al'
+alias d='dirs -v'
+alias 1='pu'
+alias 2='pu -2'
+alias 3='pu -3'
+alias 4='pu -4'
+alias 5='pu -5'
+alias 6='pu -6'
+alias 7='pu -7'
+alias 8='pu -8'
+alias 9='pu -9'
+alias pu='() { pushd $1 &> /dev/null; dirs -v; }'
+alias po='() { popd &> /dev/null; dirs -v; }'
 
 zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
