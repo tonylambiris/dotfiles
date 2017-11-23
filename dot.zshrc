@@ -168,31 +168,22 @@ POWERLEVEL9K_BATTERY_DISCONNECTED_BACKGROUND="$DEFAULT_BACKGROUND"
 
 # zsh-syntax-highlighting
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
-
+ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=white,bold,bg=red")
 typeset -A ZSH_HIGHLIGHT_STYLES
-# Override highlighter colors
-ZSH_HIGHLIGHT_STYLES[default]=none
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
-ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=009,standout
-ZSH_HIGHLIGHT_STYLES[alias]=fg=white,bold
-ZSH_HIGHLIGHT_STYLES[builtin]=fg=white,bold
-ZSH_HIGHLIGHT_STYLES[function]=fg=white,bold
-ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
-ZSH_HIGHLIGHT_STYLES[precommand]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[commandseparator]=none
-ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
-#ZSH_HIGHLIGHT_STYLES[path]=fg=214,underline
-ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
-ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=none
-ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
-ZSH_HIGHLIGHT_STYLES[assign]=none
+ZSH_HIGHLIGHT_STYLES[path]="fg=white"
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=grey"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[function]="fg=cyan"
+ZSH_HIGHLIGHT_STYLES[command]="fg=green"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=green"
+ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta"
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta,bold"
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
 
 # =============================================================================
 #                                   Plugins
@@ -201,6 +192,13 @@ ZSH_HIGHLIGHT_STYLES[assign]=none
 [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
 #source ~/.zplug/init.zsh && zplug update
 source ~/.zplug/init.zsh
+
+#zplug "b4b4r07/enhancd", use:init.sh
+zplug "b4b4r07/enhancd", use:enhancd.sh
+#zplug "b4b4r07/zsh-vimode-visual", defer:3
+zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+#zplug "knu/zsh-manydots-magic", use:manydots-magic, defer:2
+zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
 
 #zplug "plugins/bundler", from:oh-my-zsh, if:"which bundle"
 #zplug "plugins/colored-man-pages", from:oh-my-zsh
@@ -211,33 +209,14 @@ source ~/.zplug/init.zsh
 #zplug "plugins/gpg-agent", from:oh-my-zsh, if:"which gpg-agent"
 #zplug "plugins/httpie", from:oh-my-zsh, if:"which httpie"
 #zplug "plugins/nanoc", from:oh-my-zsh, if:"which nanoc"
-#zplug "plugins/nmap", from:oh-my-zsh, if:"which nmap"
-#zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 #zplug "plugins/vi-mode", from:oh-my-zsh
 
-#zplug "b4b4r07/enhancd", use:init.sh
-zplug "b4b4r07/enhancd", use:enhancd.sh
-#zplug "b4b4r07/zsh-vimode-visual", defer:3
-#zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, at:next
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
-#zplug "knu/zsh-manydots-magic", use:manydots-magic, defer:2
-zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
-
-#zplug "zsh-users/zsh-autosuggestions", at:develop
-#zplug "zsh-users/zsh-completions", defer:0
-#zplug "zsh-users/zsh-history-substring-search"
-#zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-completions",              defer:0
-zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
-
-
-#if ! zplug check; then
-#  zplug install
-#fi
-#
-#zplug load
+zplug "plugins/git",    from:oh-my-zsh, if:"which git"
+zplug "plugins/go",     from:oh-my-zsh, if:"which go"
+zplug "plugins/golang", from:oh-my-zsh, if:"which go"
+zplug "plugins/nmap",   from:oh-my-zsh, if:"which nmap"
+zplug "plugins/sudo",   from:oh-my-zsh, if:"which sudo"
+zplug "plugins/tmux",   from:oh-my-zsh, if:"which tmux"
 
 # Supports oh-my-zsh plugins and the like
 if [[ $OSTYPE = (linux)* ]]; then
@@ -251,12 +230,10 @@ if [[ $OSTYPE = (darwin)* ]]; then
 	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
 fi
 
-zplug "plugins/git",       from:oh-my-zsh, if:"which git"
-zplug "plugins/go",        from:oh-my-zsh, if:"which go"
-zplug "plugins/golang",    from:oh-my-zsh, if:"which go"
-zplug "plugins/nmap",      from:oh-my-zsh, if:"which nmap"
-zplug "plugins/sudo",      from:oh-my-zsh, if:"which sudo"
-zplug "plugins/tmux",      from:oh-my-zsh, if:"which tmux"
+zplug "zsh-users/zsh-completions",              defer:0
+zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
 
 # =============================================================================
 #                                   Options
@@ -280,11 +257,11 @@ HISTSIZE=100000
 SAVEHIST=100000
 
 setopt autocd                   # Allow changing directories without `cd`
-setopt append_history           # Don;t overwrite history
+setopt append_history           # Dont overwrite history
 setopt extended_history         # Also record time and duration of commands.
 setopt share_history            # Share history between multiple shells
 setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
-setopt hist_find_no_dups        # Don"t display duplicates during searches.
+setopt hist_find_no_dups        # Dont display duplicates during searches.
 setopt hist_ignore_dups         # Ignore consecutive duplicates.
 setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
@@ -292,7 +269,7 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 
 # Changing directories
 #setopt auto_pushd
-setopt pushd_ignore_dups        # Don"t push copies of the same dir on stack.
+setopt pushd_ignore_dups        # Dont push copies of the same dir on stack.
 setopt pushd_minus              # Reference stack entries with "-".
 
 setopt extended_glob
