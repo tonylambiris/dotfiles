@@ -313,7 +313,7 @@ if [[ $OSTYPE = (darwin|freebsd)* ]]; then
 	[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
 
 	# Prefer GNU version, since it respects dircolors.
-	if which gls; then
+	if which gls &>/dev/null; then
 		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
 	else
 		alias ls='() { $(whence -p ls) -CFtr $@ }'
@@ -401,7 +401,7 @@ setup_agents() {
   ssh_keys=(~/.ssh/**/*pub(.N:r))
   gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
 
-  if which keychain > /dev/null 2>&1; then
+  if which keychain &> /dev/null; then
 	echo $gpgkeys
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
 	  alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
