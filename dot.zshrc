@@ -240,8 +240,17 @@ zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-synta
 #zplug load
 
 # Supports oh-my-zsh plugins and the like
-zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
-zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
+if [[ $OSTYPE = (linux)* ]]; then
+	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
+	zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
+fi
+
+if [[ $OSTYPE = (darwin)* ]]; then
+	zplug "plugins/osx",      from:oh-my-zsh
+	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
+	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
+fi
+
 zplug "plugins/git",       from:oh-my-zsh, if:"which git"
 zplug "plugins/go",        from:oh-my-zsh, if:"which go"
 zplug "plugins/golang",    from:oh-my-zsh, if:"which go"
@@ -298,10 +307,17 @@ setopt extended_glob
 
 # Directory coloring
 if [[ $OSTYPE = (darwin|freebsd)* ]]; then
-	# Prefer GNU version, since it respects dircolors.
-	alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
 	export CLICOLOR="YES" # Equivalent to passing -G to ls.
 	export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
+
+	[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
+
+	# Prefer GNU version, since it respects dircolors.
+	if which gls; then
+		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
+	else
+		alias ls='() { $(whence -p ls) -CFtr $@ }'
+	fi
 else
 	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
 fi
@@ -398,7 +414,7 @@ setup_agents
 unfunction setup_agents
 
 # Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
+if ! zplug check; then
     printf "Install? [y/N]: "
     if read -q; then
         echo; zplug install
