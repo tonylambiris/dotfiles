@@ -402,11 +402,11 @@ setup_agents() {
   gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
 
   if which keychain > /dev/null 2>&1; then
+	echo $gpgkeys
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
-	  #alias keychain='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
-	  alias run_agent='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
-	  #[[ -t ${fd:-0} || -p /dev/stdin ]] && eval "$keychain)"
-	  [[ -t ${fd:-0} || -p /dev/stdin ]] && eval $keychain
+	  alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
+	  [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
+	  unalias run_agents
     fi
   fi
 }
