@@ -397,12 +397,10 @@ zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 setup_agents() {
   [[ $UID -eq 0 ]] && return
 
-  local -a ssh_keys gpg_keys
-  ssh_keys=(~/.ssh/**/*pub(.N:r))
-  gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
-
   if which keychain &> /dev/null; then
-	echo $gpgkeys
+	local -a ssh_keys gpg_keys
+	for i in ~/.ssh/**/*pub; do test -f "$i(.N:r)" && ssh_keys+=("$i(.N:r)"); done
+	gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
 	  alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
 	  [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
