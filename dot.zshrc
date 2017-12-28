@@ -420,10 +420,12 @@ fi
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
-# Source local customizations.
+# Source local zsh customizations.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-[[ -f ~/.zshrc.alias ]] && source ~/.zshrc.alias
-[[ -f ~/.zfunctions ]] && source ~/.zfunctions
+
+# Source functions and aliases.
+[[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+[[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
 
 #autoload -Uz compinit
 #compinit
