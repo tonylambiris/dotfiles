@@ -299,6 +299,13 @@ else
 	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
 fi
 
+# Set editor preference to nvim if available.
+if which nvim &>/dev/null; then
+	alias vim='() { $(whence -p nvim) $@ }'
+else
+	alias vim='() { $(whence -p vim) $@ }'
+fi
+
 # Generic command adaptations.
 alias grep='() { $(whence -p grep) --color=auto $@ }'
 alias egrep='() { $(whence -p egrep) --color=auto $@ }'
