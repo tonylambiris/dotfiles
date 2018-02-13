@@ -23,6 +23,128 @@ zsh_wifi_signal(){
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
+# =============================================================================
+#                                   Plugins
+# =============================================================================
+# Check if zplug is installed
+
+[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
+source ~/.zplug/init.zsh
+
+# zplug
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+# zsh-users
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+#zplug "zsh-users/zsh-completions",              defer:0
+#zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
+#zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
+#zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
+
+# oh-my-zsh
+#zplug "zplug/zplug"
+#zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
+
+# Supports oh-my-zsh plugins and the like
+if [[ $OSTYPE = (linux)* ]]; then
+	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
+	zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
+fi
+
+if [[ $OSTYPE = (darwin)* ]]; then
+	zplug "plugins/osx",      from:oh-my-zsh
+	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
+	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
+fi
+
+zplug "plugins/archlinux", from:oh-my-zsh
+zplug "plugins/common-aliase", from:oh-my-zsh
+zplug "plugins/colored-man-pages", from:oh-my-zsh
+zplug "plugins/colorize", from:oh-my-zsh
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "plugins/copydir", from:oh-my-zsh
+zplug "plugins/copyfile", from:oh-my-zsh
+zplug "plugins/cp", from:oh-my-zsh
+zplug "plugins/dircycle", from:oh-my-zsh
+zplug "plugins/encode64", from:oh-my-zsh
+zplug "plugins/extract", from:oh-my-zsh
+zplug "plugins/history", from:oh-my-zsh
+zplug "plugins/nmap",   from:oh-my-zsh
+zplug "plugins/tmux", from:oh-my-zsh
+zplug "plugins/tmuxinator", from:oh-my-zsh
+zplug "plugins/urltools", from:oh-my-zsh
+zplug "plugins/web-search", from:oh-my-zsh
+zplug "plugins/z", from:oh-my-zsh
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/go", from:oh-my-zsh
+zplug "plugins/svn", from:oh-my-zsh
+zplug "plugins/node", from:oh-my-zsh
+zplug "plugins/npm", from:oh-my-zsh
+#zplug "plugins/nvm", from:oh-my-zsh
+zplug "plugins/bundler", from:oh-my-zsh
+zplug "plugins/gem", from:oh-my-zsh
+zplug "plugins/rbenv", from:oh-my-zsh
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/sudo", from:oh-my-zsh
+#zplug "themes/gnzh", from:oh-my-zsh, as:theme
+
+#zplug "plugins/git",    from:oh-my-zsh, if:"which git"
+#zplug "plugins/go",     from:oh-my-zsh, if:"which go"
+#zplug "plugins/golang", from:oh-my-zsh, if:"which go"
+#zplug "plugins/nmap",   from:oh-my-zsh, if:"which nmap"
+#zplug "plugins/sudo",   from:oh-my-zsh, if:"which sudo"
+#zplug "plugins/tmux",   from:oh-my-zsh, if:"which tmux"
+
+#zplug "plugins/bundler", from:oh-my-zsh, if:"which bundle"
+#zplug "plugins/colored-man-pages", from:oh-my-zsh
+#zplug "plugins/extract", from:oh-my-zsh
+#zplug "plugins/fancy-ctrl-z", from:oh-my-zsh
+#zplug "plugins/git", from:oh-my-zsh, if:"which git"
+#zplug "plugins/globalias", from:oh-my-zsh
+#zplug "plugins/gpg-agent", from:oh-my-zsh, if:"which gpg-agent"
+#zplug "plugins/httpie", from:oh-my-zsh, if:"which httpie"
+#zplug "plugins/nanoc", from:oh-my-zsh, if:"which nanoc"
+#zplug "plugins/vi-mode", from:oh-my-zsh
+
+# plugins
+
+# Enhanced cd
+zplug "b4b4r07/enhancd", use:enhancd.sh
+
+# Bookmarks and jump
+#zplug "jocelynmallon/zshmarks"
+
+# Enhanced dir list with git features
+zplug "supercrabtree/k"
+
+# Tips for aliases
+#zplug "djui/alias-tips"
+
+# Auto-close and delete matching delimiters
+zplug "hlissner/zsh-autopair", defer:2
+
+# Docker completion
+zplug "felixr/docker-zsh-completion"
+
+# Jump back to parent directory
+zplug "tarrasch/zsh-bd"
+
+# Simple zsh calculator
+zplug "arzzen/calc.plugin.zsh"
+
+# Directory colors
+zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
+
+# Load theme
+zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+
+# Theme setup
+
+# Easily switch primary foreground/background colors
 DEFAULT_FOREGROUND=006 DEFAULT_BACKGROUND=235
 DEFAULT_COLOR=$DEFAULT_FOREGROUND
 
@@ -65,9 +187,11 @@ POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{008}> %f"
 
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="╭"
+#POWERLEVEL9K_MULTILINE_SECOND_PROMPT_PREFIX="❱ "
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="╰\uF460 "
 
 #POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context ssh root_indicator dir_writable dir )
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon root_indicator context dir_writable dir vcs)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs status time ssh)
 
@@ -166,74 +290,6 @@ POWERLEVEL9K_BATTERY_CHARGING_BACKGROUND="$DEFAULT_BACKGROUND"
 POWERLEVEL9K_BATTERY_CHARGED_BACKGROUND="$DEFAULT_BACKGROUND"
 POWERLEVEL9K_BATTERY_DISCONNECTED_BACKGROUND="$DEFAULT_BACKGROUND"
 
-# zsh-syntax-highlighting
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
-ZSH_HIGHLIGHT_PATTERNS+=("rm -rf *" "fg=white,bold,bg=red")
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[path]="fg=white"
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=grey"
-ZSH_HIGHLIGHT_STYLES[alias]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[function]="fg=cyan"
-ZSH_HIGHLIGHT_STYLES[command]="fg=green"
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=green"
-ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=green"
-ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=yellow"
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=magenta"
-ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta,bold"
-ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
-
-# =============================================================================
-#                                   Plugins
-# =============================================================================
-# Check if zplug is installed
-[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
-#source ~/.zplug/init.zsh && zplug update
-source ~/.zplug/init.zsh
-
-#zplug "b4b4r07/enhancd", use:init.sh
-zplug "b4b4r07/enhancd", use:enhancd.sh
-#zplug "b4b4r07/zsh-vimode-visual", defer:3
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
-#zplug "knu/zsh-manydots-magic", use:manydots-magic, defer:2
-zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
-
-#zplug "plugins/bundler", from:oh-my-zsh, if:"which bundle"
-#zplug "plugins/colored-man-pages", from:oh-my-zsh
-#zplug "plugins/extract", from:oh-my-zsh
-#zplug "plugins/fancy-ctrl-z", from:oh-my-zsh
-#zplug "plugins/git", from:oh-my-zsh, if:"which git"
-#zplug "plugins/globalias", from:oh-my-zsh
-#zplug "plugins/gpg-agent", from:oh-my-zsh, if:"which gpg-agent"
-#zplug "plugins/httpie", from:oh-my-zsh, if:"which httpie"
-#zplug "plugins/nanoc", from:oh-my-zsh, if:"which nanoc"
-#zplug "plugins/vi-mode", from:oh-my-zsh
-
-zplug "plugins/git",    from:oh-my-zsh, if:"which git"
-zplug "plugins/go",     from:oh-my-zsh, if:"which go"
-zplug "plugins/golang", from:oh-my-zsh, if:"which go"
-zplug "plugins/nmap",   from:oh-my-zsh, if:"which nmap"
-zplug "plugins/sudo",   from:oh-my-zsh, if:"which sudo"
-zplug "plugins/tmux",   from:oh-my-zsh, if:"which tmux"
-
-# Supports oh-my-zsh plugins and the like
-if [[ $OSTYPE = (linux)* ]]; then
-	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
-	zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
-fi
-
-if [[ $OSTYPE = (darwin)* ]]; then
-	zplug "plugins/osx",      from:oh-my-zsh
-	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
-	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
-fi
-
-zplug "zsh-users/zsh-completions",              defer:0
-zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
 
 # =============================================================================
 #                                   Options
@@ -306,9 +362,13 @@ else
 	alias vim='() { $(whence -p vim) $@ }'
 fi
 
-# Generic command adaptations.
+# Generic command adaptations
 alias grep='() { $(whence -p grep) --color=auto $@ }'
 alias egrep='() { $(whence -p egrep) --color=auto $@ }'
+
+# Custom helper aliases
+alias ccat='highlight -O ansi'
+alias rm='rm -v'
 
 # Directory management
 alias la='ls -a'
@@ -387,17 +447,18 @@ setup_agents() {
 	gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
     if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
 	  alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
-	  [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
+	  #[[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
 	  unalias run_agents
     fi
   fi
 }
+
 setup_agents
 unfunction setup_agents
 
 # Install plugins if there are plugins that have not been installed
-if ! zplug check; then
-    printf "Install? [y/N]: "
+if ! zplug check --verbose; then
+    printf "Install plugins? [y/N]: "
     if read -q; then
         echo; zplug install
     fi
@@ -406,6 +467,7 @@ fi
 # Then, source plugins and add commands to $PATH
 zplug load
 
+# dircolors
 if zplug check "seebi/dircolors-solarized"; then
   if which gdircolors &> /dev/null; then
 	alias dircolors='() { $(whence -p gdircolors) }'
@@ -416,7 +478,7 @@ if zplug check "seebi/dircolors-solarized"; then
   fi
 fi
 
-# History
+# history
 if zplug check "zsh-users/zsh-history-substring-search"; then
 	zmodload zsh/terminfo
 	bindkey "$terminfo[kcuu1]" history-substring-search-up
@@ -425,10 +487,35 @@ if zplug check "zsh-users/zsh-history-substring-search"; then
 	bindkey "^[[1;5B" history-substring-search-down
 fi
 
+# highlighting
+if zplug check "zsh-users/zsh-syntax-highlighting"; then
+	#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+	ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+
+	typeset -A ZSH_HIGHLIGHT_STYLES
+	ZSH_HIGHLIGHT_STYLES[cursor]='bg=yellow'
+	ZSH_HIGHLIGHT_STYLES[globbing]='none'
+	ZSH_HIGHLIGHT_STYLES[path]='fg=white'
+	ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=grey'
+	ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan'
+	ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan'
+	ZSH_HIGHLIGHT_STYLES[function]='fg=cyan'
+	ZSH_HIGHLIGHT_STYLES[command]='fg=green'
+	ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
+	ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green'
+	ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=yellow'
+	ZSH_HIGHLIGHT_STYLES[redirection]='fg=magenta'
+	ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=cyan,bold'
+	ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=green,bold'
+	ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
+	ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
+fi
+
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
 # Source local zsh customizations.
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+[[ -f ~/.zsh_rclocal ]] && source ~/.zsh_rclocal
 
 # Source functions and aliases.
 [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
