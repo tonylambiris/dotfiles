@@ -305,7 +305,8 @@ watch=(notme)         # Report login/logout events for everybody except ourself.
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 #WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
-WORDCHARS="\"*?_-[]~&;!#$%^(){}<>\""
+#WORDCHARS="\"*?_-[]~&;!#$%^(){}<>\""
+WORDCHARS='`~!@#$%^&*()-_=+[{]}\|;:",<.>/?'"'"
 
 # History
 HISTFILE=~/.zsh_history
@@ -413,6 +414,37 @@ bindkey "^i" expand-or-complete-prefix
 bindkey '^[^?' backward-kill-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+## Emulate tcsh's backward-delete-word
+#tcsh-backward-kill-word () {
+#    local WORDCHARS="${WORDCHARS:s#/#}"
+#    zle backward-kill-word
+#}
+#zle -N tcsh-backward-kill-word
+
+# https://github.com/sickill/dotfiles/blob/master/.zsh.d/key-bindings.zsh
+tcsh-backward-word () {
+  local WORDCHARS="${WORDCHARS:s#/#}"
+  zle emacs-backward-word
+}
+zle -N tcsh-backward-word
+bindkey '\e[1;3D' tcsh-backward-word
+bindkey '\e^[[D' tcsh-backward-word # tmux
+
+tcsh-forward-word () {
+  local WORDCHARS="${WORDCHARS:s#/#}"
+  zle emacs-forward-word
+}
+zle -N tcsh-forward-word
+bindkey '\e[1;3C' tcsh-forward-word
+bindkey '^[^[[C' tcsh-forward-word # tmux
+
+tcsh-backward-delete-word () {
+  local WORDCHARS="${WORDCHARS:s#/#}"
+  zle backward-delete-word
+}
+zle -N tcsh-backward-delete-word
+bindkey "^[^?" tcsh-backward-delete-word # urxvt
 
 # =============================================================================
 #                                 Completions
