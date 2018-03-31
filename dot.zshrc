@@ -491,7 +491,7 @@ setup_agents
 unfunction setup_agents
 
 # Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
+if ! zplug check; then
     printf "Install plugins? [y/N]: "
     if read -q; then
         echo; zplug install
