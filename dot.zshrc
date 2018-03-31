@@ -414,6 +414,8 @@ bindkey "^i" expand-or-complete-prefix
 bindkey '^[^?' backward-kill-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+bindkey "^[[C" forward-word
+bindkey "^[[D" backward-word
 
 ## Emulate tcsh's backward-delete-word
 #tcsh-backward-kill-word () {
