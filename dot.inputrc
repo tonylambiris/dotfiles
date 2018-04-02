@@ -13,7 +13,6 @@ set bind-tty-special-chars off
 # Completion Options
 set page-completions on                  # Page completions more like.
 set completion-ignore-case on            # Ignore case
-set print-completion-horizontally off    # Don't print horizontally
 set completion-query-items 200           # Show double the number of default completions.
 set match-hidden-files off               # Don't match hidden files
 set show-all-if-ambiguous on             # Enable single tab completion
