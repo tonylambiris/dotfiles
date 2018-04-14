@@ -414,8 +414,8 @@ bindkey "^i" expand-or-complete-prefix
 bindkey '^[^?' backward-kill-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-bindkey "^[[C" forward-word
-bindkey "^[[D" backward-word
+#bindkey "^[[C" forward-word
+#bindkey "^[[D" backward-word
 
 ## Emulate tcsh's backward-delete-word
 #tcsh-backward-kill-word () {
@@ -439,7 +439,7 @@ tcsh-forward-word () {
 }
 zle -N tcsh-forward-word
 bindkey '\e[1;3C' tcsh-forward-word
-bindkey '^[^[[C' tcsh-forward-word # tmux
+bindkey '\e^[[C' tcsh-backward-word # tmux
 
 tcsh-backward-delete-word () {
   local WORDCHARS="${WORDCHARS:s#/#}"
