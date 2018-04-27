@@ -476,7 +476,7 @@ if ! zplug check; then
 fi
 
 # Then, source plugins and add commands to $PATH
-zplug load --verbose
+zplug load
 
 # dircolors
 if zplug check "seebi/dircolors-solarized"; then
