@@ -330,6 +330,7 @@ setopt pushd_ignore_dups        # Dont push copies of the same dir on stack.
 setopt pushd_minus              # Reference stack entries with "-".
 
 setopt extended_glob
+setopt histignorespace
 
 # =============================================================================
 #                                   Aliases
@@ -553,6 +554,7 @@ fi
 
 # Source functions and aliases.
 [[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+[[ -f ~/.zsh_exports ]] && source ~/.zsh_exports
 [[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
 
 #autoload -Uz compinit
