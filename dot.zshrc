@@ -34,101 +34,71 @@ source ~/.zplug/init.zsh
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-# zsh-users
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
-#zplug "zsh-users/zsh-completions",              defer:0
-#zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
-#zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
-#zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
-
 # oh-my-zsh
 #zplug "zplug/zplug"
 #zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
 
+zplug "plugins/common-aliase",     from:oh-my-zsh
+zplug "plugins/colored-man-pages", from:oh-my-zsh
+zplug "plugins/colorize",          from:oh-my-zsh
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "plugins/copydir",           from:oh-my-zsh
+zplug "plugins/copyfile",          from:oh-my-zsh
+zplug "plugins/cp",                from:oh-my-zsh
+zplug "plugins/dircycle",          from:oh-my-zsh
+zplug "plugins/encode64",          from:oh-my-zsh
+zplug "plugins/extract",           from:oh-my-zsh
+zplug "plugins/history",           from:oh-my-zsh
+zplug "plugins/tmux",              from:oh-my-zsh
+zplug "plugins/tmuxinator",        from:oh-my-zsh
+zplug "plugins/urltools",          from:oh-my-zsh
+zplug "plugins/web-search",        from:oh-my-zsh
+zplug "plugins/z",                 from:oh-my-zsh
+zplug "plugins/fancy-ctrl-z",      from:oh-my-zsh
+zplug "plugins/globalias",         from:oh-my-zsh
+
 # Supports oh-my-zsh plugins and the like
 if [[ $OSTYPE = (linux)* ]]; then
-	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
-	zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
+    zplug "plugins/archlinux",     from:oh-my-zsh, if:"whence pacman"
+    zplug "plugins/dnf",           from:oh-my-zsh, if:"whence dnf"
 fi
 
 if [[ $OSTYPE = (darwin)* ]]; then
-	zplug "plugins/osx",      from:oh-my-zsh
-	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
-	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
+    zplug "lib/clipboard",         from:oh-my-zsh
+    zplug "plugins/osx",           from:oh-my-zsh
+    zplug "plugins/brew",          from:oh-my-zsh, if:"whence brew"
+    zplug "plugins/macports",      from:oh-my-zsh, if:"whence port"
 fi
 
-zplug "plugins/archlinux", from:oh-my-zsh
-zplug "plugins/common-aliase", from:oh-my-zsh
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/colorize", from:oh-my-zsh
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "plugins/copydir", from:oh-my-zsh
-zplug "plugins/copyfile", from:oh-my-zsh
-zplug "plugins/cp", from:oh-my-zsh
-zplug "plugins/dircycle", from:oh-my-zsh
-zplug "plugins/encode64", from:oh-my-zsh
-zplug "plugins/extract", from:oh-my-zsh
-zplug "plugins/history", from:oh-my-zsh
-zplug "plugins/nmap",   from:oh-my-zsh
-zplug "plugins/tmux", from:oh-my-zsh
-zplug "plugins/tmuxinator", from:oh-my-zsh
-zplug "plugins/urltools", from:oh-my-zsh
-zplug "plugins/web-search", from:oh-my-zsh
-zplug "plugins/z", from:oh-my-zsh
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/go", from:oh-my-zsh
-zplug "plugins/svn", from:oh-my-zsh
-zplug "plugins/node", from:oh-my-zsh
-zplug "plugins/npm", from:oh-my-zsh
-#zplug "plugins/nvm", from:oh-my-zsh
-zplug "plugins/bundler", from:oh-my-zsh
-zplug "plugins/gem", from:oh-my-zsh
-zplug "plugins/rbenv", from:oh-my-zsh
-zplug "plugins/pip", from:oh-my-zsh
-zplug "plugins/sudo", from:oh-my-zsh
-#zplug "themes/gnzh", from:oh-my-zsh, as:theme
+zplug "plugins/git",               from:oh-my-zsh, if:"whence git"
+zplug "plugins/golang",            from:oh-my-zsh, if:"whence go"
+zplug "plugins/svn",               from:oh-my-zsh, if:"whence svn"
+zplug "plugins/node",              from:oh-my-zsh, if:"whence node"
+zplug "plugins/npm",               from:oh-my-zsh, if:"whence npm"
+zplug "plugins/bundler",           from:oh-my-zsh, if:"whence bundler"
+zplug "plugins/gem",               from:oh-my-zsh, if:"whence gem"
+zplug "plugins/rbenv",             from:oh-my-zsh, if:"whence rbenv"
+zplug "plugins/rvm",               from:oh-my-zsh, if:"whence rvm"
+zplug "plugins/pip",               from:oh-my-zsh, if:"whence pip"
+zplug "plugins/sudo",              from:oh-my-zsh, if:"whence sudo"
+zplug "plugins/gpg-agent",         from:oh-my-zsh, if:"whence gpg-agent"
+zplug "plugins/systemd",           from:oh-my-zsh, if:"whence systemctl"
+zplug "plugins/docker",            from:oh-my-zsh, if:"whence docker"
+zplug "plugins/docker-compose",    from:oh-my-zsh, if:"whence docker-compose"
 
-#zplug "plugins/git",    from:oh-my-zsh, if:"which git"
-#zplug "plugins/go",     from:oh-my-zsh, if:"which go"
-#zplug "plugins/golang", from:oh-my-zsh, if:"which go"
-#zplug "plugins/nmap",   from:oh-my-zsh, if:"which nmap"
-#zplug "plugins/sudo",   from:oh-my-zsh, if:"which sudo"
-#zplug "plugins/tmux",   from:oh-my-zsh, if:"which tmux"
-
-#zplug "plugins/bundler", from:oh-my-zsh, if:"which bundle"
-#zplug "plugins/colored-man-pages", from:oh-my-zsh
-#zplug "plugins/extract", from:oh-my-zsh
-#zplug "plugins/fancy-ctrl-z", from:oh-my-zsh
-#zplug "plugins/git", from:oh-my-zsh, if:"which git"
-#zplug "plugins/globalias", from:oh-my-zsh
-#zplug "plugins/gpg-agent", from:oh-my-zsh, if:"which gpg-agent"
-#zplug "plugins/httpie", from:oh-my-zsh, if:"which httpie"
-#zplug "plugins/nanoc", from:oh-my-zsh, if:"which nanoc"
-#zplug "plugins/vi-mode", from:oh-my-zsh
-
-# plugins
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
+zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
+zplug "andrewferrier/fzf-z"
 
 # Enhanced cd
-zplug "b4b4r07/enhancd", use:enhancd.sh
+zplug "b4b4r07/enhancd", use:init.sh
 
 # Bookmarks and jump
-#zplug "jocelynmallon/zshmarks"
+zplug "jocelynmallon/zshmarks"
 
 # Enhanced dir list with git features
 zplug "supercrabtree/k"
-
-# Tips for aliases
-#zplug "djui/alias-tips"
-
-# Auto-close and delete matching delimiters
-zplug "hlissner/zsh-autopair", defer:2
-
-# Docker completion
-zplug "felixr/docker-zsh-completion"
 
 # Jump back to parent directory
 zplug "tarrasch/zsh-bd"
@@ -141,6 +111,15 @@ zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
 
 # Load theme
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+
+#zplug "djui/alias-tips"
+zplug "hlissner/zsh-autopair", defer:2
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search"
+# zsh-syntax-highlighting must be loaded after executing compinit command
+# and sourcing other plugins
+zplug "zsh-users/zsh-syntax-highlighting", defer:3
 
 # Theme setup
 
@@ -301,12 +280,9 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 # Watching other users
 #WATCHFMT="%n %a %l from %m at %t."
 watch=(notme)         # Report login/logout events for everybody except ourself.
-#watch=(all)         # Report login/logout events for everybody except ourself.
 LOGCHECK=60           # Time (seconds) between checks for login/logout activity.
 REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
-#WORDCHARS="\"*?_-.[]~=/&;!#$%^(){}<>\""
-#WORDCHARS="\"*?_-[]~&;!#$%^(){}<>\""
-WORDCHARS='`~!@#$%^&*()-_=+[{]}\|;:",<.>/?'"'"
+WORDCHARS='*?_-[]~=./&;!#$%^(){}<>'
 
 # History
 HISTFILE=~/.zsh_history
@@ -427,7 +403,7 @@ bindkey "^[[1;5D" backward-word
 
 # https://github.com/sickill/dotfiles/blob/master/.zsh.d/key-bindings.zsh
 tcsh-backward-word () {
-  local WORDCHARS="${WORDCHARS:s#/#}"
+  local WORDCHARS="${WORDCHARS:s#./#}"
   zle emacs-backward-word
 }
 zle -N tcsh-backward-word
@@ -435,7 +411,7 @@ bindkey '\e[1;3D' tcsh-backward-word
 bindkey '\e^[[D' tcsh-backward-word # tmux
 
 tcsh-forward-word () {
-  local WORDCHARS="${WORDCHARS:s#/#}"
+  local WORDCHARS="${WORDCHARS:s#./#}"
   zle emacs-forward-word
 }
 zle -N tcsh-forward-word
@@ -443,7 +419,7 @@ bindkey '\e[1;3C' tcsh-forward-word
 bindkey '\e^[[C' tcsh-backward-word # tmux
 
 tcsh-backward-delete-word () {
-  local WORDCHARS="${WORDCHARS:s#/#}"
+  local WORDCHARS="${WORDCHARS:s#./#}"
   zle backward-delete-word
 }
 zle -N tcsh-backward-delete-word
@@ -500,7 +476,7 @@ if ! zplug check; then
 fi
 
 # Then, source plugins and add commands to $PATH
-zplug load
+zplug load --verbose
 
 # dircolors
 if zplug check "seebi/dircolors-solarized"; then
@@ -525,7 +501,7 @@ fi
 # highlighting
 if zplug check "zsh-users/zsh-syntax-highlighting"; then
 	#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
-	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line)
 	ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
 
 	typeset -A ZSH_HIGHLIGHT_STYLES
