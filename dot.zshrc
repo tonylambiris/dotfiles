@@ -31,12 +31,42 @@ export LC_ALL="en_US.UTF-8"
 [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
 source ~/.zplug/init.zsh
 
+ENHANCD_FILTER="fzf --height 50% --reverse --ansi"
+ENHANCD_COMMAND="c"
+
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # oh-my-zsh
 #zplug "zplug/zplug"
 #zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
+
+# Initiali commands and plugins
+zplug "k4rthik/git-cal", as:command
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, use:"*${(L)$(uname -s)}*amd64*"
+zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
+zplug "andrewferrier/fzf-z"
+
+# Enhanced cd
+zplug "b4b4r07/enhancd", use:init.sh
+
+# Bookmarks and jump
+zplug "jocelynmallon/zshmarks"
+
+# Enhanced dir list with git features
+zplug "supercrabtree/k"
+
+# Jump back to parent directory
+zplug "tarrasch/zsh-bd"
+
+# Simple zsh calculator
+zplug "arzzen/calc.plugin.zsh"
+
+# Directory colors
+zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
+
+# Load theme
+zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
 zplug "plugins/common-aliase",     from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
@@ -84,31 +114,6 @@ zplug "plugins/gpg-agent",         from:oh-my-zsh, if:"whence gpg-agent"
 zplug "plugins/systemd",           from:oh-my-zsh, if:"whence systemctl"
 zplug "plugins/docker",            from:oh-my-zsh, if:"whence docker"
 zplug "plugins/docker-compose",    from:oh-my-zsh, if:"whence docker-compose"
-
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
-zplug "andrewferrier/fzf-z"
-
-# Enhanced cd
-zplug "b4b4r07/enhancd", use:init.sh
-
-# Bookmarks and jump
-zplug "jocelynmallon/zshmarks"
-
-# Enhanced dir list with git features
-zplug "supercrabtree/k"
-
-# Jump back to parent directory
-zplug "tarrasch/zsh-bd"
-
-# Simple zsh calculator
-zplug "arzzen/calc.plugin.zsh"
-
-# Directory colors
-zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
-
-# Load theme
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
 #zplug "djui/alias-tips"
 zplug "hlissner/zsh-autopair", defer:2
