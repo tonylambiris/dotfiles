@@ -23,6 +23,11 @@ zsh_wifi_signal(){
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,bg+:235,hl+:10,pointer:5'
+
+export ENHANCD_FILTER="fzf:peco:percol"
+export ENHANCD_COMMAND='c'
+
 # =============================================================================
 #                                   Plugins
 # =============================================================================
@@ -31,9 +36,6 @@ export LC_ALL="en_US.UTF-8"
 [ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
 source ~/.zplug/init.zsh
 
-ENHANCD_FILTER="fzf --height 50% --reverse --ansi"
-ENHANCD_COMMAND="c"
-
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
@@ -41,11 +43,13 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 #zplug "zplug/zplug"
 #zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
 
-# Initiali commands and plugins
-zplug "k4rthik/git-cal", as:command
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, use:"*${(L)$(uname -s)}*amd64*"
+# Miscellaneous commands
+#zplug "andrewferrier/fzf-z"
+zplug "k4rthik/git-cal",  as:command
+zplug "peco/peco",        as:command, from:gh-r
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, \
+	use:"*${(L)$(uname -s)}*amd64*"
 zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
-zplug "andrewferrier/fzf-z"
 
 # Enhanced cd
 zplug "b4b4r07/enhancd", use:init.sh
@@ -329,9 +333,6 @@ if ! zplug check; then
     fi
 fi
 
-# Then, source plugins and add commands to $PATH
-zplug load
-
 if zplug check "seebi/dircolors-solarized"; then
   which gdircolors &> /dev/null && alias dircolors='() { $(whence -p gdircolors) }'
   which dircolors &> /dev/null && \
@@ -371,8 +372,8 @@ if zplug check "zsh-users/zsh-syntax-highlighting"; then
 fi
 
 if zplug check "b4b4r07/enhancd"; then
-    ENHANCD_FILTER="fzf --height 50% --reverse --ansi"
     ENHANCD_DOT_SHOW_FULLPATH=1
+	ENHANCD_DISABLE_HOME=0
 fi
 
 if zplug check "b4b4r07/zsh-history-enhanced"; then
@@ -529,6 +530,9 @@ if zplug check "bhilburn/powerlevel9k"; then
     POWERLEVEL9K_BATTERY_CHARGED_BACKGROUND="$DEFAULT_BACKGROUND"
     POWERLEVEL9K_BATTERY_DISCONNECTED_BACKGROUND="$DEFAULT_BACKGROUND"
 fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
