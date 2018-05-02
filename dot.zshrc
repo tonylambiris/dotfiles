@@ -133,7 +133,8 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:3
 # =============================================================================
 
 # improved less option
-export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
+#export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
+export LESS="-CQaix4"
 
 # Watching other users
 #WATCHFMT="%n %a %l from %m at %t."
@@ -148,7 +149,7 @@ WORDCHARS='*?_-[]~=./&;!#$%^(){}<>'
 # History
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
-SAVEHIST=100000
+SAVEHIST=$HISTSIZE
 
 setopt autocd                   # Allow changing directories without `cd`
 setopt append_history           # Dont overwrite history
@@ -160,6 +161,7 @@ setopt hist_ignore_dups         # Ignore consecutive duplicates.
 setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
 setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
+setopt hist_ignore_space        # Ignore commands that start with space.
 
 # Changing directories
 #setopt auto_pushd
@@ -167,7 +169,6 @@ setopt pushd_ignore_dups        # Dont push copies of the same dir on stack.
 setopt pushd_minus              # Reference stack entries with "-".
 
 setopt extended_glob
-setopt histignorespace
 
 # =============================================================================
 #                                   Aliases
@@ -539,16 +540,15 @@ zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
-# Source local zsh customizations.
+# Source defined functions.
+[[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+
+# Source local customizations.
 [[ -f ~/.zsh_rclocal ]] && source ~/.zsh_rclocal
 
-# Source functions and aliases.
-[[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+# Source exports and aliases.
 [[ -f ~/.zsh_exports ]] && source ~/.zsh_exports
 [[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
-
-#autoload -Uz compinit
-#compinit
 
 #ZLE_RPROMPT_INDENT=0
 
