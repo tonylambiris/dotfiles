@@ -92,32 +92,32 @@ zplug "plugins/fancy-ctrl-z",      from:oh-my-zsh
 
 # Supports oh-my-zsh plugins and the like
 if [[ $OSTYPE = (linux)* ]]; then
-    zplug "plugins/archlinux",     from:oh-my-zsh, if:"whence pacman"
-    zplug "plugins/dnf",           from:oh-my-zsh, if:"whence dnf"
+    zplug "plugins/archlinux",     from:oh-my-zsh, if:"(( $+commands[pacman] ))"
+    zplug "plugins/dnf",           from:oh-my-zsh, if:"(( $+commands[dnf] ))"
 fi
 
 if [[ $OSTYPE = (darwin)* ]]; then
     zplug "lib/clipboard",         from:oh-my-zsh
     zplug "plugins/osx",           from:oh-my-zsh
-    zplug "plugins/brew",          from:oh-my-zsh, if:"whence brew"
-    zplug "plugins/macports",      from:oh-my-zsh, if:"whence port"
+    zplug "plugins/brew",          from:oh-my-zsh, if:"(( $+commands[brew] ))"
+    zplug "plugins/macports",      from:oh-my-zsh, if:"(( $+commands[port] ))"
 fi
 
-zplug "plugins/git",               from:oh-my-zsh, if:"whence git"
-zplug "plugins/golang",            from:oh-my-zsh, if:"whence go"
-zplug "plugins/svn",               from:oh-my-zsh, if:"whence svn"
-zplug "plugins/node",              from:oh-my-zsh, if:"whence node"
-zplug "plugins/npm",               from:oh-my-zsh, if:"whence npm"
-zplug "plugins/bundler",           from:oh-my-zsh, if:"whence bundler"
-zplug "plugins/gem",               from:oh-my-zsh, if:"whence gem"
-zplug "plugins/rbenv",             from:oh-my-zsh, if:"whence rbenv"
-zplug "plugins/rvm",               from:oh-my-zsh, if:"whence rvm"
-zplug "plugins/pip",               from:oh-my-zsh, if:"whence pip"
-zplug "plugins/sudo",              from:oh-my-zsh, if:"whence sudo"
-zplug "plugins/gpg-agent",         from:oh-my-zsh, if:"whence gpg-agent"
-zplug "plugins/systemd",           from:oh-my-zsh, if:"whence systemctl"
-zplug "plugins/docker",            from:oh-my-zsh, if:"whence docker"
-zplug "plugins/docker-compose",    from:oh-my-zsh, if:"whence docker-compose"
+zplug "plugins/git",               from:oh-my-zsh, if:"(( $+commands[git] ))"
+zplug "plugins/golang",            from:oh-my-zsh, if:"(( $+commands[go] ))"
+zplug "plugins/svn",               from:oh-my-zsh, if:"(( $+commands[svn] ))"
+zplug "plugins/node",              from:oh-my-zsh, if:"(( $+commands[node] ))"
+zplug "plugins/npm",               from:oh-my-zsh, if:"(( $+commands[npm] ))"
+zplug "plugins/bundler",           from:oh-my-zsh, if:"(( $+commands[bundler] ))"
+zplug "plugins/gem",               from:oh-my-zsh, if:"(( $+commands[gem] ))"
+zplug "plugins/rbenv",             from:oh-my-zsh, if:"(( $+commands[rbenv] ))"
+zplug "plugins/rvm",               from:oh-my-zsh, if:"(( $+commands[rvm] ))"
+zplug "plugins/pip",               from:oh-my-zsh, if:"(( $+commands[pip] ))"
+zplug "plugins/sudo",              from:oh-my-zsh, if:"(( $+commands[sudo] ))"
+zplug "plugins/gpg-agent",         from:oh-my-zsh, if:"(( $+commands[gpg-agent] ))"
+zplug "plugins/systemd",           from:oh-my-zsh, if:"(( $+commands[systemctl] ))"
+zplug "plugins/docker",            from:oh-my-zsh, if:"(( $+commands[docker] ))"
+zplug "plugins/docker-compose",    from:oh-my-zsh, if:"(( $+commands[docker-compose] ))"
 
 #zplug "djui/alias-tips"
 zplug "hlissner/zsh-autopair", defer:2
@@ -182,7 +182,7 @@ if [[ $OSTYPE = (darwin|freebsd)* ]]; then
 	[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
 
 	# Prefer GNU version, since it respects dircolors.
-	if which gls &>/dev/null; then
+	if (( $+commands[gls] )); then
 		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
 	else
 		alias ls='() { $(whence -p ls) -CFtr $@ }'
@@ -192,7 +192,7 @@ else
 fi
 
 # Set editor preference to nvim if available.
-if which nvim &>/dev/null; then
+if (( $+commands[nvim] )); then
 	alias vim='() { $(whence -p nvim) $@ }'
 else
 	alias vim='() { $(whence -p vim) $@ }'
@@ -310,7 +310,7 @@ zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 setup_agents() {
   [[ $UID -eq 0 ]] && return
 
-  if which keychain &> /dev/null; then
+  if (( $+commands[keychain] )); then
 	local -a ssh_keys gpg_keys
 	for i in ~/.ssh/**/*pub; do test -f "$i(.N:r)" && ssh_keys+=("$i(.N:r)"); done
 	gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
