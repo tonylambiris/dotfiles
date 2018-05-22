@@ -123,18 +123,17 @@ zplug "plugins/docker-compose",    from:oh-my-zsh, if:"(( $+commands[docker-comp
 zplug "hlissner/zsh-autopair", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search"
 # zsh-syntax-highlighting must be loaded after executing compinit command
 # and sourcing other plugins
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-history-substring-search", defer:3
 
 # =============================================================================
 #                                   Options
 # =============================================================================
 
 # improved less option
-#export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
-export LESS="-CQaix4"
+export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
 
 # Watching other users
 #WATCHFMT="%n %a %l from %m at %t."
