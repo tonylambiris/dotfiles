@@ -147,7 +147,7 @@ WORDCHARS='*?_-[]~=./&;!#$%^(){}<>'
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=100000
+HISTSIZE=10000
 SAVEHIST=$HISTSIZE
 
 setopt autocd                   # Allow changing directories without `cd`
