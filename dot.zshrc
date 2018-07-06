@@ -72,7 +72,7 @@ zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
 # Load theme
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
-zplug "plugins/common-aliase",     from:oh-my-zsh
+zplug "plugins/common-aliases",    from:oh-my-zsh
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/colorize",          from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
