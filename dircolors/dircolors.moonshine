@@ -1,0 +1,328 @@
+# "Moonshine" - a dircolor colorscheme for GNU ls.
+# github: https://github.com/KKPMW/dircolors-moonshine
+# author: Karolis Koncevicius
+# license: http://sam.zoy.org/wtfpl/ Do What The Fuck You Want To Public License
+#
+# This dircolors colorscheme is heavily based on and inspired by "Solarized":
+# @author  {@link http://sebastian.tramp.name Sebastian Tramp}
+# @license http://sam.zoy.org/wtfpl/ Do What The Fuck You Want To Public License
+
+
+# Configuration file for dircolors, a utility to help you set the
+# LS_COLORS environment variable used by GNU ls with the --color option.
+
+
+# Term Section
+TERM Eterm
+TERM ansi
+TERM color-xterm
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM dvtm
+TERM dvtm-256color
+TERM eterm-color
+TERM fbterm
+TERM gnome
+TERM gnome-256color
+TERM jfbterm
+TERM konsole
+TERM konsole-256color
+TERM kterm
+TERM linux
+TERM linux-c
+TERM mach-color
+TERM mlterm
+TERM putty
+TERM putty-256color
+TERM rxvt
+TERM rxvt-256color
+TERM rxvt-cygwin
+TERM rxvt-cygwin-native
+TERM rxvt-unicode
+TERM rxvt-unicode256
+TERM rxvt-unicode-256color
+TERM screen
+TERM screen-16color
+TERM screen-16color-bce
+TERM screen-16color-s
+TERM screen-16color-bce-s
+TERM screen-256color
+TERM screen-256color-bce
+TERM screen-256color-s
+TERM screen-256color-bce-s
+TERM screen-256color-italic
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM screen.xterm-256color
+TERM st
+TERM st-meta
+TERM st-256color
+TERM st-meta-256color
+TERM tmux
+TERM tmux-256color
+TERM vt100
+TERM xterm
+TERM xterm-16color
+TERM xterm-256color
+TERM xterm-256color-italic
+TERM xterm-88color
+TERM xterm-color
+TERM xterm-debian
+TERM xterm-termite
+
+## Documentation
+#
+# standard colors
+#
+# Below are the color init strings for the basic file types. A color init
+# string consists of one or more of the following numeric codes:
+# Attribute codes:
+# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+# Text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+#
+#
+# 256 color support
+# see here: http://www.mail-archive.com/bug-coreutils@gnu.org/msg11030.html)
+#
+# Text 256 color coding:
+# 38;5;COLOR_NUMBER
+# Background 256 color coding:
+# 48;5;COLOR_NUMBER
+
+# Special files
+NORMAL 00;38;5;230 # global default
+FILE   00;38;5;230 # normal file
+DIR    01;38;5;143 # directory
+LINK   07;38;5;106 # symbolic link. ('target'=the color for the file pointed to)
+ORPHAN 07;38;5;160 # symlink to nonexistent file
+FIFO   07;38;5;137 # pipe
+EXEC   00;38;5;160 # executable
+SOCK   01;38;5;143 # socket
+DOOR   01;38;5;143 # door
+BLK    01;38;5;137 # block device driver
+CHR    01;38;5;137 # character device driver
+
+# Archives or compressed
+.tar    00;38;5;96
+.tgz    00;38;5;96
+.arj    00;38;5;96
+.taz    00;38;5;96
+.lzh    00;38;5;96
+.lzma   00;38;5;96
+.tlz    00;38;5;96
+.txz    00;38;5;96
+.zip    00;38;5;96
+.z      00;38;5;96
+.Z      00;38;5;96
+.dz     00;38;5;96
+.gz     00;38;5;96
+.lz     00;38;5;96
+.xz     00;38;5;96
+.bz2    00;38;5;96
+.bz     00;38;5;96
+.tbz    00;38;5;96
+.tbz2   00;38;5;96
+.tz     00;38;5;96
+.deb    00;38;5;96
+.rpm    00;38;5;96
+.jar    00;38;5;96
+.rar    00;38;5;96
+.ace    00;38;5;96
+.zoo    00;38;5;96
+.cpio   00;38;5;96
+.7z     00;38;5;96
+.rz     00;38;5;96
+.apk    00;38;5;96
+.gem    00;38;5;96
+
+# Image formats
+.jpg    00;38;5;220
+.JPG    00;38;5;220
+.jpeg   00;38;5;220
+.gif    00;38;5;220
+.bmp    00;38;5;220
+.pbm    00;38;5;220
+.pgm    00;38;5;220
+.ppm    00;38;5;220
+.tga    00;38;5;220
+.xbm    00;38;5;220
+.xpm    00;38;5;220
+.tif    00;38;5;220
+.tiff   00;38;5;220
+.png    00;38;5;220
+.PNG    00;38;5;220
+.svg    00;38;5;220
+.svgz   00;38;5;220
+.mng    00;38;5;220
+.pcx    00;38;5;220
+.dl     00;38;5;220
+.xcf    00;38;5;220
+.xwd    00;38;5;220
+.yuv    00;38;5;220
+.cgm    00;38;5;220
+.emf    00;38;5;220
+.eps    00;38;5;220
+.CR2    00;38;5;220
+.ico    00;38;5;220
+
+# Video
+.mov    00;38;5;208
+.MOV    00;38;5;208
+.mpg    00;38;5;208
+.mpeg   00;38;5;208
+.m2v    00;38;5;208
+.mkv    00;38;5;208
+.ogm    00;38;5;208
+.mp4    00;38;5;208
+.m4v    00;38;5;208
+.mp4v   00;38;5;208
+.vob    00;38;5;208
+.qt     00;38;5;208
+.nuv    00;38;5;208
+.wmv    00;38;5;208
+.asf    00;38;5;208
+.rm     00;38;5;208
+.rmvb   00;38;5;208
+.flc    00;38;5;208
+.avi    00;38;5;208
+.fli    00;38;5;208
+.flv    00;38;5;208
+.gl     00;38;5;208
+.m2ts   00;38;5;208
+.divx   00;38;5;208
+.webm   00;38;5;208
+
+# Audio
+.aac    00;38;5;214
+.au     00;38;5;214
+.flac   00;38;5;214
+.mid    00;38;5;214
+.midi   00;38;5;214
+.mka    00;38;5;214
+.mp3    00;38;5;214
+.mpc    00;38;5;214
+.ogg    00;38;5;214
+.ra     00;38;5;214
+.wav    00;38;5;214
+.m4a    00;38;5;214
+
+# Documents/Readables
+.pdf  00;38;5;109
+.PDF  00;38;5;109
+.html 00;38;5;109
+.HTML 00;38;5;109
+.doc  00;38;5;109
+.docx 00;38;5;109
+.ppt  00;38;5;109
+.pptx 00;38;5;109
+.odt  00;38;5;109
+.odp  00;38;5;109
+.epub 00;38;5;109
+
+# Source code files
+.pl     00;38;5;179
+.PL     00;38;5;179
+.py     00;38;5;179
+.pm     00;38;5;179
+.tt     00;38;5;179
+.yml    00;38;5;179
+.sql    00;38;5;179
+.css    00;38;5;179
+.js     00;38;5;179
+.sh     00;38;5;179
+.R      00;38;5;179
+.r      00;38;5;179
+.hs     00;38;5;179
+.rb     00;38;5;179
+.cc     00;38;5;179
+.c      00;38;5;179
+.lua    00;38;5;179
+.vim    00;38;5;179
+.m      00;38;5;179
+
+# Libraries/Literates/Documentations
+.1      00;38;5;137
+.h      00;38;5;137
+.tex    00;38;5;137
+.bib    00;38;5;137
+.Rd     00;38;5;137
+.rmd    00;38;5;137
+.Rmd    00;38;5;137
+
+# Special sources/configs
+*Makefile 00;38;5;94
+*do       00;38;5;94
+*Doxyfile 00;38;5;94
+*config   00;38;5;94
+.conf     00;38;5;94
+.cfg      00;38;5;94
+
+# Plain text
+.txt 00;38;5;230
+.md  00;38;5;230
+
+# Other readables
+.xlm   00;38;5;245
+.xls   00;38;5;245
+.xlsx  00;38;5;245
+.csv   00;38;5;245
+.tsv   00;38;5;245
+.Rds   00;38;5;245
+.rds   00;38;5;245
+.RDS   00;38;5;245
+.Rdata 00;38;5;245
+.RData 00;38;5;245
+.RDATA 00;38;5;245
+.sav   00;38;5;245
+.mat   00;38;5;245
+.json  00;38;5;245
+
+# Special interest
+*README           07;38;5;230
+*README.txt       07;38;5;230
+*README.md        07;38;5;230
+*README.markdown  07;38;5;230
+*TODO             07;38;5;230
+*todo             07;38;5;230
+*NOTE             07;38;5;230
+*note             07;38;5;230
+
+# "unimportant" files (logs and backups)
+.log        00;38;5;238
+.bak        00;38;5;238
+.aux        00;38;5;238
+.lof        00;38;5;238
+.lol        00;38;5;238
+.lot        00;38;5;238
+.out        00;38;5;238
+.toc        00;38;5;238
+.bbl        00;38;5;238
+.blg        00;38;5;238
+*~          00;38;5;238
+*#          00;38;5;238
+.part       00;38;5;238
+.incomplete 00;38;5;238
+.swp        00;38;5;238
+.tmp        00;38;5;238
+.temp       00;38;5;238
+.o          00;38;5;238
+.pyc        00;38;5;238
+.class      00;38;5;238
+.cache      00;38;5;238
+
