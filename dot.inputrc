@@ -38,9 +38,14 @@ $if mode=emacs
     "\e[6~": history-search-forward      # Page Down
     #"\t": menu-complete                 # Tab cycles through completions
 
-	# Mappings for Ctrl-left-arrow and Ctrl-right-arrow word moving
-	#"\e[1;5C": forward-word
-	#"\e[1;5D": backward-word
+	# Mappings for Alt/Ctrl left-arrow and right-arrow word moving
+	# Alt-arrow
+	"\e[1;3D": backward-word
+	"\e[1;3C": forward-word
+
+	# Ctrl-arrow
+	"\e[1;5C": forward-word
+	"\e[1;5D": backward-word
 
     # If the above prevents Left and Right from working, try this:
     #"\e[C": forward-char                # Move forward one character.
