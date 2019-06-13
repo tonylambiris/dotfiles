@@ -2,54 +2,134 @@
 #                                   Functions
 # =============================================================================
 powerlevel9k_random_color(){
-	local code
-	#for code ({000..255}) echo -n "$%F{$code}"
-	#code=$[${RANDOM}%11+10]    # random between 10-20
-	code=$[${RANDOM}%211+20]    # random between 20-230
-	printf "%03d" $code
+    printf "%03d" $[${RANDOM}%234+16] #random between 16-250
 }
 
 zsh_wifi_signal(){
-	local signal=$(nmcli -t device wifi | grep '^*' | awk -F':' '{print $6}')
+    local signal=$(nmcli -t device wifi | grep '^*' | awk -F':' '{print $6}')
     local color="yellow"
     [[ $signal -gt 75 ]] && color="green"
     [[ $signal -lt 50 ]] && color="red"
     echo -n "%F{$color}\uf1eb" # \uf1eb is 
 }
 
+function set_title(){
+    echo -ne "\033];$(hostname): $(pwd)\007"
+}
+
 # =============================================================================
 #                                   Variables
 # =============================================================================
+# Common ENV variables
+export TERM="xterm-256color"
+export SHELL="/bin/zsh"
+export EDITOR="nvim"
+
+# Fix Locale
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,bg+:235,hl+:10,pointer:5'
+# History
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=10000
+export SAVEHIST=$HISTSIZE
 
-export ENHANCD_FILTER="fzf:peco:percol"
-export ENHANCD_COMMAND='c'
+#export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
+
+# color formatting for man pages
+export LESS_TERMCAP_mb=$'\e[1;31m'     # begin bold
+export LESS_TERMCAP_md=$'\e[1;36m'     # begin blink
+export LESS_TERMCAP_so=$'\e[1;33;44m'  # begin reverse video
+export LESS_TERMCAP_us=$'\e[1;37m'     # begin underline
+export LESS_TERMCAP_me=$'\e[0m'        # reset bold/blink
+export LESS_TERMCAP_se=$'\e[0m'        # reset reverse video
+export LESS_TERMCAP_ue=$'\e[0m'        # reset underline
+export GROFF_NO_SGR=1                  # for konsole and gnome-terminal
+
+export MANPAGER='less -s -M -R +Gg'
+
+# Directory coloring
+if [[ $OSTYPE = (darwin|freebsd)* ]]; then
+    #export CLICOLOR="YES" # Equivalent to passing -G to ls.
+    #export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
+    #export LS_OPTIONS='-G'
+    export CLICOLOR=true
+    export LSCOLORS='exfxcxdxbxGxDxabagacad'
+
+    #[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
+
+    ## Prefer GNU version, since it respects dircolors.
+    #if (( $+commands[gls] )); then
+    #   alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
+    #else
+    #   alias ls='() { $(whence -p ls) -CFtr $@ }'
+    #fi
+fi
+
+if [[ $OSTYPE = (linux)* ]]; then
+    export LS_OPTIONS='--color=auto'
+fi
+
+# Common aliases
+alias rm="rm -v"
+alias cp="cp -v"
+alias mv="mv -v"
+alias ls="ls $LS_OPTIONS -hFtr"
+alias ll="ls $LS_OPTIONS -lAhFtr"
+alias ccat="pygmentize -O style=monokai -f 256 -g"
+alias dig="dig +nocmd any +multiline +noall +answer"
+
+disable -r time       # disable shell reserved word
+alias time='time -p ' # -p for POSIX output
 
 # =============================================================================
 #                                   Plugins
 # =============================================================================
 # Check if zplug is installed
+#[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
+#source ~/.zplug/init.zsh
 
-[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
+# Check if zplug is installed
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update
+    zplug "zplug/zplug", hook-build:"zplug --self-manage"
+fi
 source ~/.zplug/init.zsh
 
 # zplug
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#zplug 'themes/sorin', from:oh-my-zsh, as:theme
 
 # oh-my-zsh
-#zplug "zplug/zplug"
 #zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
 
+# Load theme
+zplug "mafredri/zsh-async", from:github, use:async.zsh
+zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, from:github, at:next, as:theme
+#zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+#zplug "aaronjamesyoung/aaron-zsh-theme", use:aaron.zsh-theme, from:github, as:theme
+#zplug "gporrata/bklyn-zsh"
+
+#zplug "themes/spaceship", from:oh-my-zsh, as:theme
+#zplug "dracula/zsh", from:github, as:theme
+#zplug "geometry-zsh/geometry", from:github, as:theme
+#zplug "mafredri/zsh-async", from:github, use:async.zsh
+#zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+#zplug "eendroroy/alien", from:github, as:theme
+
+zplug "chrissicool/zsh-256color"
+zplug "mollifier/anyframe"
+
 # Miscellaneous commands
+zplug "zdharma/zsh-diff-so-fancy"
+
 #zplug "andrewferrier/fzf-z"
-zplug "k4rthik/git-cal",  as:command
-zplug "peco/peco",        as:command, from:gh-r
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, \
-	use:"*${(L)$(uname -s)}*amd64*"
-zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
+zplug "k4rthik/git-cal", as:command
+zplug "peco/peco", as:command, from:gh-r, use:"*${(L)$(uname -s)}*amd64*"
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, use:"*${(L)$(uname -s)}*amd64*"
+zplug "junegunn/fzf", use:"shell/*.zsh"
+#zplug "b4b4r07/easy-oneliner", if:"which fzf", on:"junegunn/fzf-bin"
 
 # Enhanced cd
 zplug "b4b4r07/enhancd", use:init.sh
@@ -68,13 +148,16 @@ zplug "arzzen/calc.plugin.zsh"
 
 # Directory colors
 zplug "seebi/dircolors-solarized", ignore:"*", as:plugin
+zplug "pinelibg/dircolors-solarized-zsh"
 
-# Load theme
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+# ZSH history database
+HISTDB_TABULATE_CMD=(sed -e $'s/\x1f/\t/g')
+#zplug "larkery/zsh-histdb", use:sqlite-history.zsh, hook-load:"histdb-update-outcome"
+zplug "larkery/zsh-histdb", use:"{sqlite-history,histdb-interactive}.zsh", hook-load:"histdb-update-outcome"
 
-zplug "plugins/common-aliases",    from:oh-my-zsh
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-#zplug "plugins/colorize",          from:oh-my-zsh
+zplug "zdharma/fast-syntax-highlighting"
+
+zplug "plugins/common-aliase",     from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
 zplug "plugins/copydir",           from:oh-my-zsh
 zplug "plugins/copyfile",          from:oh-my-zsh
@@ -94,6 +177,7 @@ zplug "plugins/fancy-ctrl-z",      from:oh-my-zsh
 if [[ $OSTYPE = (linux)* ]]; then
     zplug "plugins/archlinux",     from:oh-my-zsh, if:"(( $+commands[pacman] ))"
     zplug "plugins/dnf",           from:oh-my-zsh, if:"(( $+commands[dnf] ))"
+    zplug "plugins/mock",          from:oh-my-zsh, if:"(( $+commands[mock] ))"
 fi
 
 if [[ $OSTYPE = (darwin)* ]]; then
@@ -110,7 +194,6 @@ zplug "plugins/node",              from:oh-my-zsh, if:"(( $+commands[node] ))"
 zplug "plugins/npm",               from:oh-my-zsh, if:"(( $+commands[npm] ))"
 zplug "plugins/bundler",           from:oh-my-zsh, if:"(( $+commands[bundler] ))"
 zplug "plugins/gem",               from:oh-my-zsh, if:"(( $+commands[gem] ))"
-zplug "plugins/rbenv",             from:oh-my-zsh, if:"(( $+commands[rbenv] ))"
 zplug "plugins/rvm",               from:oh-my-zsh, if:"(( $+commands[rvm] ))"
 zplug "plugins/pip",               from:oh-my-zsh, if:"(( $+commands[pip] ))"
 zplug "plugins/sudo",              from:oh-my-zsh, if:"(( $+commands[sudo] ))"
@@ -118,6 +201,8 @@ zplug "plugins/gpg-agent",         from:oh-my-zsh, if:"(( $+commands[gpg-agent] 
 zplug "plugins/systemd",           from:oh-my-zsh, if:"(( $+commands[systemctl] ))"
 zplug "plugins/docker",            from:oh-my-zsh, if:"(( $+commands[docker] ))"
 zplug "plugins/docker-compose",    from:oh-my-zsh, if:"(( $+commands[docker-compose] ))"
+zplug "plugins/terraform",         from:oh-my-zsh, if:"(( $+commands[terraform] ))"
+zplug "plugins/vagrant",           from:oh-my-zsh, if:"(( $+commands[vagrant] ))"
 
 #zplug "djui/alias-tips"
 zplug "hlissner/zsh-autopair", defer:2
@@ -131,9 +216,79 @@ zplug "zsh-users/zsh-history-substring-search", defer:3
 # =============================================================================
 #                                   Options
 # =============================================================================
+autoload -Uz add-zsh-hook
+#autoload -Uz compinit && compinit -u
+#autoload -Uz url-quote-magic
+#autoload -Uz vcs_info
 
-# improved less option
-export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
+# required for zsh-histdb
+#autoload -Uz add-zsh-hook
+#add-zsh-hook precmd histdb-update-outcome
+
+#autoload -U add-zsh-hook
+#add-zsh-hook precmd  theme_precmd
+
+#zle -N self-insert url-quote-magic
+
+setopt autocd                   # Allow changing directories without `cd`
+setopt append_history           # Dont overwrite history
+setopt auto_list
+setopt auto_menu
+setopt auto_pushd
+setopt extended_history         # Also record time and duration of commands.
+setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
+setopt hist_find_no_dups        # Dont display duplicates during searches.
+setopt hist_ignore_dups         # Ignore consecutive duplicates.
+setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
+setopt hist_reduce_blanks       # Remove superfluous blanks.
+setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
+setopt hist_ignore_space        # Ignore commands that start with space.
+#setopt hist_ignore_all_dups
+#setopt hist_ignore_dups
+#setopt hist_reduce_blanks
+#setopt hist_save_no_dups
+#setopt ignore_eof
+setopt inc_append_history
+setopt interactive_comments
+setopt no_beep
+setopt no_hist_beep
+setopt no_list_beep
+setopt magic_equal_subst
+setopt notify
+setopt print_eight_bit
+setopt print_exit_value
+setopt prompt_subst
+setopt pushd_ignore_dups
+#setopt rm_star_wait
+setopt share_history            # Share history between multiple shells
+setopt transient_rprompt
+
+## Changing directories
+#setopt auto_pushd
+#setopt pushd_ignore_dups        # Dont push copies of the same dir on stack.
+#setopt pushd_minus              # Reference stack entries with "-".
+#
+#setopt extended_glob
+
+bindkey -v
+bindkey -v '^?' backward-delete-char
+bindkey '^[[Z' reverse-menu-complete
+#bindkey '^@' anyframe-widget-cd-ghq-repository
+#bindkey '^r' anyframe-widget-put-history
+
+#cp() {
+#   command cp --reflink=auto "$@"
+#}
+
+#function cd() {
+#   builtin cd $@ && ls;
+#}
+
+function history() {
+	#rg --smart-case --colors 'path:fg:yellow' --vimgrep -o '[^;]*$' ~/.zsh_history
+	#rg --smart-case --vimgrep -p -o '[^;]*$' ~/.zsh_history
+    rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always" --vimgrep -o '[^;]*$' ~/.zsh_history
+}
 
 # Watching other users
 #WATCHFMT="%n %a %l from %m at %t."
@@ -145,88 +300,7 @@ REPORTTIME=5          # Display usage statistics for commands running > 5 sec.
 KEYTIMEOUT=1
 WORDCHARS='*?_-[]~=./&;!#$%^(){}<>'
 
-# History
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=$HISTSIZE
-
-setopt autocd                   # Allow changing directories without `cd`
-setopt append_history           # Dont overwrite history
-setopt extended_history         # Also record time and duration of commands.
-setopt share_history            # Share history between multiple shells
-setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
-setopt hist_find_no_dups        # Dont display duplicates during searches.
-setopt hist_ignore_dups         # Ignore consecutive duplicates.
-setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
-setopt hist_reduce_blanks       # Remove superfluous blanks.
-setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
-setopt hist_ignore_space        # Ignore commands that start with space.
-
-# Changing directories
-#setopt auto_pushd
-setopt pushd_ignore_dups        # Dont push copies of the same dir on stack.
-setopt pushd_minus              # Reference stack entries with "-".
-
-setopt extended_glob
-
-# =============================================================================
-#                                   Aliases
-# =============================================================================
-
-# In the definitions below, you will see use of function definitions instead of
-# aliases for some cases. We use this method to avoid expansion of the alias in
-# combination with the globalias plugin.
-
-# Directory coloring
-if [[ $OSTYPE = (darwin|freebsd)* ]]; then
-	export CLICOLOR="YES" # Equivalent to passing -G to ls.
-	export LSCOLORS="exgxdHdHcxaHaHhBhDeaec"
-
-	[ -d "/opt/local/bin" ] && export PATH="/opt/local/bin:$PATH"
-
-	# Prefer GNU version, since it respects dircolors.
-	if (( $+commands[gls] )); then
-		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
-	else
-		alias ls='() { $(whence -p ls) -CFtr $@ }'
-	fi
-else
-	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
-fi
-
-# Set editor preference to nvim if available.
-if (( $+commands[nvim] )); then
-	alias vim='() { $(whence -p nvim) $@ }'
-else
-	alias vim='() { $(whence -p vim) $@ }'
-fi
-
-# Generic command adaptations
-alias grep='() { $(whence -p grep) --color=auto $@ }'
-alias egrep='() { $(whence -p egrep) --color=auto $@ }'
-
-# Custom helper aliases
-alias ccat='highlight -O ansi'
-alias rm='rm -v'
-
-# Directory management
-alias la='ls -a'
-alias ll='ls -l'
-alias lal='ls -al'
-alias d='dirs -v'
-alias 1='pu'
-alias 2='pu -2'
-alias 3='pu -3'
-alias 4='pu -4'
-alias 5='pu -5'
-alias 6='pu -6'
-alias 7='pu -7'
-alias 8='pu -8'
-alias 9='pu -9'
-alias pu='() { pushd $1 &> /dev/null; dirs -v; }'
-alias po='() { popd &> /dev/null; dirs -v; }'
-
-zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+#zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 # =============================================================================
 #                                Key Bindings
@@ -264,69 +338,52 @@ bindkey "^[[1;5D" backward-word
 
 # https://github.com/sickill/dotfiles/blob/master/.zsh.d/key-bindings.zsh
 tcsh-backward-word () {
-  local WORDCHARS="${WORDCHARS:s#./#}"
-  zle emacs-backward-word
+    local WORDCHARS="${WORDCHARS:s#./#}"
+    zle emacs-backward-word
 }
 zle -N tcsh-backward-word
 bindkey '\e[1;3D' tcsh-backward-word
 bindkey '\e^[[D' tcsh-backward-word # tmux
 
 tcsh-forward-word () {
-  local WORDCHARS="${WORDCHARS:s#./#}"
-  zle emacs-forward-word
+    local WORDCHARS="${WORDCHARS:s#./#}"
+    zle emacs-forward-word
 }
 zle -N tcsh-forward-word
 bindkey '\e[1;3C' tcsh-forward-word
 bindkey '\e^[[C' tcsh-backward-word # tmux
 
 tcsh-backward-delete-word () {
-  local WORDCHARS="${WORDCHARS:s#./#}"
-  zle backward-delete-word
+    local WORDCHARS="${WORDCHARS:s#./#}"
+    zle backward-delete-word
 }
 zle -N tcsh-backward-delete-word
 bindkey "^[^?" tcsh-backward-delete-word # urxvt
-
-# =============================================================================
-#                                 Completions
-# =============================================================================
-
-zstyle ':completion:*' rehash true
-#zstyle ':completion:*' verbose yes
-#zstyle ':completion:*:descriptions' format '%B%d%b'
-#zstyle ':completion:*:messages' format '%d'
-#zstyle ':completion:*:warnings' format 'No matches for: %d'
-#zstyle ':completion:*' group-name ''
-
-# case-insensitive (all), partial-word and then substring completion
-zstyle ":completion:*" matcher-list \
-  "m:{a-zA-Z}={A-Za-z}" \
-  "r:|[._-]=* r:|=*" \
-  "l:|=* r:|=*"
-
-zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 
 # =============================================================================
 #                                   Startup
 # =============================================================================
 
 # Load SSH and GPG agents via keychain.
-setup_agents() {
-  [[ $UID -eq 0 ]] && return
+#setup_agents() {
+#    [[ $UID -eq 0 ]] && return
+#
+#    if (( $+commands[keychain] )); then
+#        local -a ssh_keys gpg_keys
+#        for i in ~/.ssh/**/*pub; do test -f "$i(.N:r)" && ssh_keys+=("$i(.N:r)"); done
+#        gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
+#        if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
+#            alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
+#            [[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
+#            unalias run_agents
+#        fi
+#    fi
+#}
+#setup_agents
+#unfunction setup_agents
 
-  if (( $+commands[keychain] )); then
-	local -a ssh_keys gpg_keys
-	for i in ~/.ssh/**/*pub; do test -f "$i(.N:r)" && ssh_keys+=("$i(.N:r)"); done
-	gpg_keys=$(gpg -K --with-colons 2>/dev/null | awk -F : '$1 == "sec" { print $5 }')
-    if (( $#ssh_keys > 0 )) || (( $#gpg_keys > 0 )); then
-	  alias run_agents='() { $(whence -p keychain) --quiet --eval --inherit any-once --agents ssh,gpg $ssh_keys ${(f)gpg_keys} }'
-	  #[[ -t ${fd:-0} || -p /dev/stdin ]] && eval `run_agents`
-	  unalias run_agents
-    fi
-  fi
-}
-
-setup_agents
-unfunction setup_agents
+[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+DIRCOLORS_SOLARIZED_ZSH_THEME="256dark"
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check; then
@@ -336,84 +393,268 @@ if ! zplug check; then
     fi
 fi
 
-if zplug check "seebi/dircolors-solarized"; then
-  which gdircolors &> /dev/null && alias dircolors='() { $(whence -p gdircolors) }'
-  which dircolors &> /dev/null && \
-	  eval $(dircolors ~/.zplug/repos/seebi/dircolors-solarized/dircolors.256dark)
+if zplug check "larkery/zsh-histdb"; then
+    if [ ! -f "$HOME/.histdb/zsh-history.db" ]; then
+        echo "Import your old zsh history with github.com/drewis/go-histdbimport"
+    fi
+
+    #_zsh_autosuggest_strategy_histdb_top_here() {
+    #    local query="select commands.argv from
+    #history left join commands on history.command_id = commands.rowid
+    #left join places on history.place_id = places.rowid
+    #where places.dir LIKE '$(sql_escape $PWD)%'
+    #and commands.argv LIKE '$(sql_escape $1)%'
+    #group by commands.argv order by count(*) desc limit 1"
+    #    suggestion=$(_histdb_query "$query")
+    #}
+    #ZSH_AUTOSUGGEST_STRATEGY=histdb_top_here
+
+    #bindkey '^r' _histdb-isearch
+fi
+
+if zplug check "junegunn/fzf-bin"; then
+    export FZF_DEFAULT_OPTS="--height 40% --reverse --border --inline-info --color=dark,bg+:235,hl+:10,pointer:5"
+fi
+
+if zplug check "sindresorhus/pure"; then
+    PURE_CMD_MAX_EXEC_TIME=0
+    PURE_PROMPT_SYMBOL="%F{124}➜ %f"
+    #PURE_PROMPT_SYMBOL="%F{124}⇢  %f"
+fi
+
+if zplug check "geometry-zsh/geometry"; then
+    GEOMETRY_PROMPT_PLUGINS=(git exec_time)
+
+    GEOMETRY_COLOR_EXIT_VALUE="magenta"         # prompt symbol color when exit value is != 0
+
+    PROMPT_GEOMETRY_EXEC_TIME=true
+    PROMPT_GEOMETRY_COMMAND_MAX_EXEC_TIME=0
+
+    PROMPT_GEOMETRY_COLORIZE_ROOT=true
+    PROMPT_GEOMETRY_RPROMPT_ASYNC=true
+    PROMPT_GEOMETRY_COLORIZE_SYMBOL=true
+fi
+
+if zplug check "mollifier/anyframe"; then
+    # expressly specify to use peco
+    #zstyle ":anyframe:selector:" use peco
+    # expressly specify to use percol
+    #zstyle ":anyframe:selector:" use percol
+    # expressly specify to use fzf-tmux
+    #zstyle ":anyframe:selector:" use fzf-tmux
+    # expressly specify to use fzf
+    zstyle ":anyframe:selector:" use fzf
+
+    # specify path and options for peco, percol, or fzf
+    #zstyle ":anyframe:selector:peco:" command 'peco --no-ignore-case'
+    #zstyle ":anyframe:selector:percol:" command 'percol --case-sensitive'
+    #zstyle ":anyframe:selector:fzf-tmux:" command 'fzf-tmux --extended'
+    #zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
+    #zstyle ":anyframe:selector:fzf:" command 'fzf'
+
+    #bindkey '^@' anyframe-widget-cd-ghq-repository
+    #bindkey '^r' anyframe-widget-put-history
 fi
 
 if zplug check "zsh-users/zsh-history-substring-search"; then
-	zmodload zsh/terminfo
-	bindkey "$terminfo[kcuu1]" history-substring-search-up
-	bindkey "$terminfo[kcud1]" history-substring-search-down
-	bindkey "^[[1;5A" history-substring-search-up
-	bindkey "^[[1;5B" history-substring-search-down
+    zmodload zsh/terminfo
+    bindkey "$terminfo[kcuu1]" history-substring-search-up
+    bindkey "$terminfo[kcud1]" history-substring-search-down
+    bindkey "^[[1;5A" history-substring-search-up
+    bindkey "^[[1;5B" history-substring-search-down
 fi
 
 if zplug check "zsh-users/zsh-syntax-highlighting"; then
-	#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
-	ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line)
-	ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+    typeset -gA ZSH_HIGHLIGHT_STYLES ZSH_HIGHLIGHT_PATTERNS
 
-	typeset -A ZSH_HIGHLIGHT_STYLES
-	ZSH_HIGHLIGHT_STYLES[cursor]='bg=yellow'
-	ZSH_HIGHLIGHT_STYLES[globbing]='none'
-	ZSH_HIGHLIGHT_STYLES[path]='fg=white'
-	ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=grey'
-	ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan'
-	ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan'
-	ZSH_HIGHLIGHT_STYLES[function]='fg=cyan'
-	ZSH_HIGHLIGHT_STYLES[command]='fg=green'
-	ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
-	ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green'
-	ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=yellow'
-	ZSH_HIGHLIGHT_STYLES[redirection]='fg=magenta'
-	ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=cyan,bold'
-	ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=green,bold'
-	ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
-	ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
+    ZSH_HIGHLIGHT_STYLES[cursor]=fg=yellow,bold
+    ZSH_HIGHLIGHT_STYLES[default]=none
+    ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=green,bold
+    ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=green,bold
+    ZSH_HIGHLIGHT_STYLES[alias]=fg=cyan,bold
+    ZSH_HIGHLIGHT_STYLES[builtin]=fg=cyan,bold
+    ZSH_HIGHLIGHT_STYLES[function]=fg=cyan,bold
+    ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
+    ZSH_HIGHLIGHT_STYLES[precommand]=fg=white,underline
+    ZSH_HIGHLIGHT_STYLES[commandseparator]=none
+    ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=green,bold
+    ZSH_HIGHLIGHT_STYLES[path]=fg=214,underline
+    ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
+    ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
+    ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=070
+    ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=070
+    ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+    ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
+    ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
+    ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
+    ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+    ZSH_HIGHLIGHT_STYLES[assign]=none
+
+    ## Override highlighter colors
+    #ZSH_HIGHLIGHT_STYLES[default]=none
+    #ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=009
+    #ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=009,standout
+    #ZSH_HIGHLIGHT_STYLES[alias]=fg=white,bold
+    #ZSH_HIGHLIGHT_STYLES[builtin]=fg=white,bold
+    #ZSH_HIGHLIGHT_STYLES[function]=fg=white,bold
+    #ZSH_HIGHLIGHT_STYLES[command]=fg=white,bold
+    #ZSH_HIGHLIGHT_STYLES[precommand]=fg=white,underline
+    #ZSH_HIGHLIGHT_STYLES[commandseparator]=none
+    #ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=009
+    #ZSH_HIGHLIGHT_STYLES[path]=fg=214,underline
+    #ZSH_HIGHLIGHT_STYLES[globbing]=fg=063
+    #ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=white,underline
+    ##ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=green
+    ##ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=green
+    #ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=070
+    #ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=070
+    #ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
+    #ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=063
+    #ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=063
+    #ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=009
+    #ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=009
+    #ZSH_HIGHLIGHT_STYLES[assign]=none
+
+	#ZSH_HIGHLIGHT_STYLES[path]='fg=underline'
+    #ZSH_HIGHLIGHT_STYLES[default]='none'
+    #ZSH_HIGHLIGHT_STYLES[cursor]='fg=yellow'
+    #ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=red'
+    #ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=yellow'
+    #ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[function]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[command]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[precommand]='fg=green'
+    #ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=yellow'
+    #ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green'
+    #ZSH_HIGHLIGHT_STYLES[path]='fg=white,underline'
+    #ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=grey,underline'
+    #ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=white'
+    #ZSH_HIGHLIGHT_STYLES[path_approx]='fg=white'
+    #ZSH_HIGHLIGHT_STYLES[globbing]='none'
+    #ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=green'
+    #ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=blue,bold'
+    #ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=blue,bold'
+    #ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='none'
+    #ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=magenta,bold'
+    #ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=magenta,bold'
+    #ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=cyan'
+    #ZSH_HIGHLIGHT_STYLES[redirection]='fg=magenta'
+    #ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=cyan,bold'
+    #ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=green,bold'
+    #ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
+    #ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
+    #ZSH_HIGHLIGHT_STYLES[assign]='none'
+
+    ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor line)
+fi
+
+if zplug check "zsh-users/zsh-autosuggestions"; then
+    #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=075'
+    #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=162'
+
 fi
 
 if zplug check "b4b4r07/enhancd"; then
-    ENHANCD_DOT_SHOW_FULLPATH=1
-	ENHANCD_DISABLE_HOME=0
+    ENHANCD_FILTER="fzf:peco:percol"
+    ENHANCD_COMMAND="c"
 fi
 
 if zplug check "b4b4r07/zsh-history-enhanced"; then
-	ZSH_HISTORY_FILE="$HISTFILE"
+    ZSH_HISTORY_FILE="$HISTFILE"
     ZSH_HISTORY_FILTER="fzf:peco:percol"
     ZSH_HISTORY_KEYBIND_GET_BY_DIR="^r"
     ZSH_HISTORY_KEYBIND_GET_ALL="^r^a"
 fi
 
-if zplug check "bhilburn/powerlevel9k"; then
-    # Easily switch primary foreground/background colors
-    DEFAULT_FOREGROUND=006 DEFAULT_BACKGROUND=235
-    DEFAULT_COLOR=$DEFAULT_FOREGROUND
+if zplug check "denysdovhan/spaceship-prompt"; then
+    SPACESHIP_PROMPT_ORDER=(
+    # time        # Time stampts section (Disabled)
+    user          # Username section
+    dir           # Current directory section
+    host          # Hostname section
+    git           # Git section (git_branch + git_status)
+    exec_time     # Execution time
+    line_sep      # Line break
+    battery       # Battery level and status
+    jobs          # Background jobs indicator
+    char          # Prompt character
+    )
 
-    # powerlevel9k prompt theme
+    SPACESHIP_RPROMPT_ORDER=(
+    exit_code     # Exit code section
+    time
+    )
+
+    SPACESHIP_TIME_SHOW=true
+    SPACESHIP_EXIT_CODE_SHOW=true
+
+    SPACESHIP_PROMPT_SEPARATE_LINE=false
+    SPACESHIP_PROMPT_ADD_NEWLINE=true
+
+    #SPACESHIP_PROMPT_SEPARATE_LINE=false
+    #SPACESHIP_PROMPT_FIRST_PREFIX_SHOW=true
+
+    #PROMPT='%F{red}%n%f@%F{blue}%m%f %F{yellow}%1~%f %# '
+    #RPROMPT='[%F{yellow}%?%f]'
+fi
+
+if zplug check "bhilburn/powerlevel9k"; then
     #DEFAULT_USER=$USER
 
+    # Easily switch primary foreground/background colors
+    #DEFAULT_FOREGROUND=038 DEFAULT_BACKGROUND=024 PROMPT_COLOR=038
+
+    DEFAULT_FOREGROUND=006 DEFAULT_BACKGROUND=235 PROMPT_COLOR=173
+    DEFAULT_FOREGROUND=198 DEFAULT_BACKGROUND=090 PROMPT_COLOR=173
+    DEFAULT_FOREGROUND=235 DEFAULT_BACKGROUND=159 PROMPT_COLOR=173
+    DEFAULT_FOREGROUND=123 DEFAULT_BACKGROUND=059 PROMPT_COLOR=183
+    DEFAULT_FOREGROUND=159 DEFAULT_BACKGROUND=238 PROMPT_COLOR=173
+    DEFAULT_FOREGROUND=159 DEFAULT_BACKGROUND=239 PROMPT_COLOR=172
+    #DEFAULT_COLOR=$DEFAULT_FOREGROUND
+    DEFAULT_COLOR="clear"
+
     P9K_MODE="nerdfont-complete"
-    P9K_SHORTEN_DIR_LENGTH=1
+    P9K_STATUS_VERBOSE=false
+    P9K_DIR_SHORTEN_LENGTH=1
     #P9K_SHORTEN_STRATEGY="truncate_right"
 
     P9K_DIR_OMIT_FIRST_CHARACTER=false
 
-    P9K_ALWAYS_SHOW_CONTEXT=true
-    P9K_ALWAYS_SHOW_USER=false
+    P9K_CONTEXT_ALWAYS_SHOW=true
+    P9K_CONTEXT_ALWAYS_SHOW_USER=false
 
-    P9K_CONTEXT_TEMPLATE="\uF109 %m"
+    #P9K_CONTEXT_TEMPLATE="\uF109 %m"
 
-    P9K_CONTEXT_DEFAULT_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_CONTEXT_DEFAULT_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_CONTEXT_ROOT_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_CONTEXT_ROOT_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 2 ))}|%f"
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 2 ))}|%f"
 
-    P9K_LEFT_SEGMENT_SEPARATOR="\uE0B4"
-    P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 2 ))}|%f"
-    P9K_RIGHT_SEGMENT_SEPARATOR="\uE0B6"
-    P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 2 ))}|%f"
+    #P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{$DEFAULT_BACKGROUND}\ue0b0%f"
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{$DEFAULT_BACKGROUND}\ue0b2%f"
+    P9K_LEFT_SUBSEGMENT_SEPARATOR_ICON="%F{232}\uE0BD%f"
+    P9K_RIGHT_SUBSEGMENT_SEPARATOR_ICON="%F{232}\uE0BD%f"
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{000}%f"
+    #P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{000}／%f" # 
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{000}／%f" #
+    #P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 3 ))}／%f"
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{$(( $DEFAULT_BACKGROUND - 3 ))}／%f"
+    #P9K_LEFT_SUBSEGMENT_SEPARATOR="%F{$DEFAULT_FOREGROUND}\uE0B0%f"
+    #P9K_RIGHT_SUBSEGMENT_SEPARATOR="%F{$DEFAULT_FOREGROUND}\uE0B3%f"
+
+    #P9K_LEFT_SEGMENT_SEPARATOR="\uE0B4"
+    #P9K_RIGHT_SEGMENT_SEPARATOR="\uE0B6"
+    P9K_LEFT_SEGMENT_SEPARATOR_ICON='▓▒░'
+    P9K_RIGHT_SEGMENT_SEPARATOR_ICON='░▒▓'
+    #P9K_LEFT_SEGMENT_SEPARATOR="\uE0BC\u200A"
+    #P9K_RIGHT_SEGMENT_SEPARATOR="\u200A\uE0BA"
+    #P9K_LEFT_SEGMENT_SEPARATOR="\uE0BC"
+    #P9K_RIGHT_SEGMENT_SEPARATOR="\uE0BA"
+    #P9K_LEFT_SEGMENT_SEPARATOR="%F{$DEFAULT_BACKGROUND}\uE0BC%f"
+    #P9K_RIGHT_SEGMENT_SEPARATOR="%F{$DEFAULT_BACKGROUND}\uE0BA%f"
 
     P9K_PROMPT_ON_NEWLINE=true
     P9K_RPROMPT_ON_NEWLINE=false
@@ -422,133 +663,182 @@ if zplug check "bhilburn/powerlevel9k"; then
     P9K_STATUS_CROSS=true
     P9K_PROMPT_ADD_NEWLINE=true
 
-    #P9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{cyan}\u256D\u2500%f"
-    #P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{014}\u2570%F{cyan}\uF460%F{073}\uF460%F{109}\uF460%f "
-    #P9K_MULTILINE_FIRST_PROMPT_PREFIX="╭─%f"
-    #P9K_MULTILINE_LAST_PROMPT_PREFIX="╰─%F{008}\uF460 %f"
-    #P9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-    #P9K_MULTILINE_LAST_PROMPT_PREFIX="%F{008}> %f"
+    P9K_MULTILINE_FIRST_PROMPT_PREFIX_ICON="%F{$PROMPT_COLOR}%f"
+    P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%F{$PROMPT_COLOR}➜ %f"
+    #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%F{$PROMPT_COLOR}⇢ ➜  %f"
+    #P9K_MULTILINE_LAST_PROMPT_PREFIX_ICON="%F{$PROMPT_COLOR} ┄⇢ %f"
 
-    P9K_MULTILINE_FIRST_PROMPT_PREFIX="╭"
-    #P9K_MULTILINE_SECOND_PROMPT_PREFIX="❱ "
-    P9K_MULTILINE_LAST_PROMPT_PREFIX="╰\uF460 "
+    # P9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir_writable dir vcs)
+    # P9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs time ssh)
 
-    #P9K_LEFT_PROMPT_ELEMENTS=(context ssh root_indicator dir_writable dir )
-    #P9K_LEFT_PROMPT_ELEMENTS=(os_icon root_indicator context dir_writable dir vcs)
-    P9K_LEFT_PROMPT_ELEMENTS=(root_indicator context dir_writable dir vcs)
-    P9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time background_jobs status time ssh)
+    #P9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir_writable dir_joined vcs)
+    #P9K_LEFT_PROMPT_ELEMENTS=(context dir_writable dir_joined vcs)
+    #P9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator exec_time background_jobs time)
+    P9K_LEFT_PROMPT_ELEMENTS=(os_icon context dir dir_writable vcs)
+    P9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs command_execution_time time)
 
-    P9K_VCS_CLEAN_BACKGROUND="green"
-    P9K_VCS_CLEAN_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_VCS_MODIFIED_BACKGROUND="yellow"
-    P9K_VCS_MODIFIED_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_VCS_UNTRACKED_BACKGROUND="magenta"
-    P9K_VCS_UNTRACKED_FOREGROUND="$DEFAULT_BACKGROUND"
-
-    P9K_DIR_HOME_BACKGROUND="$DEFAULT_FOREGROUND"
-    P9K_DIR_HOME_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_DIR_HOME_SUBFOLDER_BACKGROUND="$DEFAULT_FOREGROUND"
-    P9K_DIR_HOME_SUBFOLDER_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_DIR_DEFAULT_BACKGROUND="$DEFAULT_FOREGROUND"
-    P9K_DIR_DEFAULT_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="$DEFAULT_FOREGROUND"
-    P9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="$DEFAULT_BACKGROUND"
-
-    P9K_STATUS_OK_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_STATUS_OK_FOREGROUND="green"
-    P9K_STATUS_OK_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_STATUS_OK_BACKGROUND="$(( $DEFAULT_BACKGROUND + 2 ))"
-
-    P9K_STATUS_ERROR_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_STATUS_ERROR_FOREGROUND="red"
-    P9K_STATUS_ERROR_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_STATUS_ERROR_BACKGROUND="$(( $DEFAULT_BACKGROUND + 2 ))"
-
-    P9K_HISTORY_FOREGROUND="$DEFAULT_FOREGROUND"
-
-    P9K_TIME_FORMAT="%D{%T \uF017}" #  15:29:33
-    P9K_TIME_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_TIME_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_MODE='nerdfont-complete'
 
     P9K_VCS_GIT_GITHUB_ICON=""
     P9K_VCS_GIT_BITBUCKET_ICON=""
     P9K_VCS_GIT_GITLAB_ICON=""
     P9K_VCS_GIT_ICON=""
 
-    P9K_COMMAND_EXECUTION_TIME_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_COMMAND_EXECUTION_TIME_BACKGROUND="$DEFAULT_FOREGROUND"
-    P9K_EXECUTION_TIME_ICON="\u23F1"
+    P9K_VCS_CLEAN_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_VCS_CLEAN_FOREGROUND="010"
 
-    #P9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
-    #P9K_COMMAND_EXECUTION_TIME_PRECISION=0
+    P9K_VCS_MODIFIED_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_VCS_MODIFIED_FOREGROUND="011"
 
-    P9K_BACKGROUND_JOBS_FOREGROUND="$DEFAULT_BACKGROUND"
-    P9K_BACKGROUND_JOBS_BACKGROUND="$DEFAULT_FOREGROUND"
+    P9K_VCS_UNTRACKED_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_VCS_UNTRACKED_FOREGROUND="012"
+    P9K_VCS_UNTRACKED_FOREGROUND="011"
 
-    P9K_USER_ICON="\uF415" # 
-    P9K_USER_DEFAULT_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_USER_DEFAULT_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_USER_ROOT_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_USER_ROOT_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_VCS_SHORTEN_STRATEGY="truncate_middle"
 
-    P9K_ROOT_INDICATOR_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_ROOT_INDICATOR_FOREGROUND="magenta"
+    P9K_DIR_HOME_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_DIR_HOME_FOREGROUND="158"
+    P9K_DIR_HOME_SUBFOLDER_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_DIR_HOME_SUBFOLDER_FOREGROUND="158"
+    P9K_DIR_WRITABLE_FORBIDDEN_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_DIR_WRITABLE_FORBIDDEN_FOREGROUND="red"
+    P9K_DIR_DEFAULT_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_DIR_DEFAULT_FOREGROUND="158"
+    P9K_DIR_ETC_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_DIR_ETC_FOREGROUND="158"
+    P9K_DIR_NOT_WRITABLE_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_DIR_NOT_WRITABLE_FOREGROUND="158"
+
     P9K_ROOT_INDICATOR_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_ROOT_INDICATOR_BACKGROUND="$(( $DEFAULT_BACKGROUND + 2 ))"
-    P9K_ROOT_INDICATOR_BACKGROUND="$(( $DEFAULT_BACKGROUND - 2 ))"
-    #P9K_ROOT_ICON=$'\uFF03' # ＃
-    P9K_ROOT_ICON=$'\uF198'  # 
+    P9K_ROOT_INDICATOR_FOREGROUND="red"
 
-    P9K_SSH_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_SSH_FOREGROUND="yellow"
-    P9K_SSH_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_SSH_BACKGROUND="$(( $DEFAULT_BACKGROUND + 2 ))"
-    P9K_SSH_BACKGROUND="$(( $DEFAULT_BACKGROUND - 2 ))"
-    P9K_SSH_ICON="\uF489"  # 
+    P9K_STATUS_OK_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_STATUS_OK_FOREGROUND="green"
+    P9K_STATUS_ERROR_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_STATUS_ERROR_FOREGROUND="red"
 
-    P9K_HOST_LOCAL_FOREGROUND="$DEFAULT_FOREGROUND"
+    #P9K_TIME_FORMAT="%D{%H:%M:%S \uf017}" #  Jun 15  09:32
+    P9K_TIME_ICON="\uF017" # 
+    #P9K_TIME_BACKGROUND="$(( $DEFAULT_BACKGROUND - 2 ))"
+    P9K_TIME_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_TIME_FOREGROUND="183"
+
+    P9K_COMMAND_EXECUTION_TIME_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_COMMAND_EXECUTION_TIME_FOREGROUND="183"
+    P9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+    P9K_COMMAND_EXECUTION_TIME_PRECISION=1
+
+    P9K_BACKGROUND_JOBS_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_BACKGROUND_JOBS_FOREGROUND="123"
+
+    P9K_USER_DEFAULT_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_USER_DEFAULT_FOREGROUND="cyan"
+    P9K_USER_SUDO_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_USER_SUDO_FOREGROUND="magenta"
+    P9K_USER_ROOT_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_USER_ROOT_FOREGROUND="red"
+    P9K_USER_DEFAULT_ICON="\uF415" # 
+    P9K_USER_ROOT_ICON=$'\uFF03' # ＃
+
+    P9K_CONTEXT_TEMPLATE="\uF109 %m"
+    #P9K_CONTEXT_TEMPLATE="\uF109 %m"
+    P9K_CONTEXT_DEFAULT_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_CONTEXT_DEFAULT_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_CONTEXT_DEFAULT_FOREGROUND="123"
+    P9K_CONTEXT_SUDO_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_CONTEXT_SUDO_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_CONTEXT_SUDO_FOREGROUND="123"
+    P9K_CONTEXT_REMOTE_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_CONTEXT_REMOTE_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_CONTEXT_REMOTE_FOREGROUND="123"
+    P9K_CONTEXT_REMOTE_SUDO_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_CONTEXT_REMOTE_SUDO_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_CONTEXT_REMOTE_SUDO_FOREGROUND="123"
+    P9K_CONTEXT_ROOT_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_CONTEXT_ROOT_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_CONTEXT_ROOT_FOREGROUND="123"
+
     P9K_HOST_LOCAL_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_HOST_REMOTE_FOREGROUND="$DEFAULT_FOREGROUND"
+    #P9K_HOST_LOCAL_FOREGROUND="cyan"
     P9K_HOST_REMOTE_BACKGROUND="$DEFAULT_BACKGROUND"
+    #P9K_HOST_REMOTE_FOREGROUND="magenta"
+    P9K_HOST_LOCAL_ICON="\uF109 " # 
+    P9K_HOST_REMOTE_ICON="\uF489 "  # 
 
-    P9K_HOST_ICON_FOREGROUND="$DEFAULT_FOREGROUND"
-    P9K_HOST_ICON_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_HOST_ICON="\uF109" # 
-
-    P9K_OS_ICON_FOREGROUND="$DEFAULT_FOREGROUND"
+    P9K_SSH_ICON="\uF489 "  # 
+    #P9K_SSH_BACKGROUND="$(( $DEFAULT_BACKGROUND - 2 ))"
+    P9K_SSH_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_SSH_FOREGROUND="212"
+    #P9K_OS_ICON_BACKGROUND="$(( $DEFAULT_BACKGROUND - 2 ))"
     P9K_OS_ICON_BACKGROUND="$DEFAULT_BACKGROUND"
+    P9K_OS_ICON_FOREGROUND="212"
+    #P9K_SHOW_CHANGESET=true
+fi
 
-    P9K_LOAD_CRITICAL_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_LOAD_WARNING_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_LOAD_NORMAL_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_LOAD_CRITICAL_FOREGROUND="red"
-    P9K_LOAD_WARNING_FOREGROUND="yellow"
-    P9K_LOAD_NORMAL_FOREGROUND="green"
-    P9K_LOAD_CRITICAL_VISUAL_IDENTIFIER_COLOR="red"
-    P9K_LOAD_WARNING_VISUAL_IDENTIFIER_COLOR="yellow"
-    P9K_LOAD_NORMAL_VISUAL_IDENTIFIER_COLOR="green"
-
-    P9K_BATTERY_LEVEL_BACKGROUND_COLOR="$DEFAULT_BACKGROUND"
-    P9K_BATTERY_CHARGING_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_BATTERY_CHARGED_BACKGROUND="$DEFAULT_BACKGROUND"
-    P9K_BATTERY_DISCONNECTED_BACKGROUND="$DEFAULT_BACKGROUND"
+# Install plugins if there are plugins that have not been installed
+if ! zplug check; then
+    printf "Install plugins? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
 fi
 
 # Then, source plugins and add commands to $PATH
 zplug load
 
-[ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+# =============================================================================
+#                                 Completions
+# =============================================================================
+#zstyle ':completion:' completer _complete _match _approximate
+#zstyle ':completion:' group-name ''
+## Color completion for some items.
+##zstyle ':completion:' list-colors ${(s.:.)LS_COLORS}
+#zstyle ':completion:' matcher-list 'm:{a-z}={A-Z}'
+#zstyle ':completion:' use-cache true
+#zstyle ':completion:' verbose yes
+#zstyle ':completion:*:default' menu select=2
+#zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+#zstyle ':completion:*:options' description 'yes'
 
-# Source defined functions.
-[[ -f ~/.zsh_functions ]] && source ~/.zsh_functions
+zstyle ':completion:*' menu select # select completions with arrow keys
+zstyle ':completion:*' group-name '' # group results by category
+zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 
-# Source local customizations.
-[[ -f ~/.zsh_rclocal ]] && source ~/.zsh_rclocal
+# case-insensitive (uppercase from lowercase) completion
+#zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# Source exports and aliases.
-[[ -f ~/.zsh_exports ]] && source ~/.zsh_exports
-[[ -f ~/.zsh_aliases ]] && source ~/.zsh_aliases
+# process completion
+#zstyle ':completion:*:processes' command 'ps -au$USER'
+#zstyle ':completion:*:*:kill:*:processes' list-colors "=(#b) #([0-9]#)*=36=31"
+
+# zstyle
+zstyle ':completion:*' completer _expand _complete _ignored _approximate
+#zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu select=2
+zstyle ':completion:*' select-prompt '%SScrolling active: current selection at %p%s'
+zstyle ':completion:*:descriptions' format '%U%F{yellow}%d%f%u'
+#zstyle ':completion:*:*:git:*' script ~/.git-completion.sh
+
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name ''
+
+# case-insensitive (all), partial-word and then substring completion
+zstyle ":completion:*" matcher-list \
+    "m:{a-zA-Z}={A-Za-z}" \
+    "r:|[._-]=* r:|=*" \
+    "l:|=* r:|=*"
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
 
 #ZLE_RPROMPT_INDENT=0
 
-# vim: ft=zsh
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# vim: ft=zsh sw=4 sts=4 et
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
